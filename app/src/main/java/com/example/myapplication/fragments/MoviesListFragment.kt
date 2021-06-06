@@ -8,10 +8,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.myapplication.adapters.MovieBannerAdpter
 import com.example.myapplication.adapters.MovieListAdapter
 import com.example.myapplication.data.model.MovieModel
 import com.example.myapplication.data.model.MovieModelImpl
+import com.example.myapplication.data.vos.ResultsVO
 import com.example.myapplication.databinding.FragmentMoviesListBinding
+import com.zhpan.bannerview.BannerViewPager
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -20,7 +23,7 @@ class MoviesListFragment : Fragment() {
 
     private var _binding: FragmentMoviesListBinding? = null
     private lateinit var movieModel: MovieModel
-
+    private lateinit var mViewPager: BannerViewPager<ResultsVO>
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -66,6 +69,7 @@ class MoviesListFragment : Fragment() {
         movieModel = MovieModelImpl()
         movieModel.getUpcomingMovies(onSuccess = {
             upcomingListAdapter.movieList = it.results
+            setupViewPager(it.results)
             upcomingListAdapter.notifyDataSetChanged()
         },
         onFailure = {
@@ -87,8 +91,27 @@ class MoviesListFragment : Fragment() {
         onFailure = {
             Toast.makeText(requireContext(),it,Toast.LENGTH_LONG).show()
         })
+
     }
 
+    private fun setupViewPager(resultsVO: List<ResultsVO>){
+        binding.bannerView.let {
+            it.setAdapter(MovieBannerAdpter())
+            it.setLifecycleRegistry(lifecycle)
+        }.create(resultsVO)
+    }
+
+    /*override fun onPause() {
+        if (mViewPager != null)
+            mViewPager.stopLoop()
+        super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (mViewPager != null)
+            mViewPager.stopLoop()
+    }*/
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

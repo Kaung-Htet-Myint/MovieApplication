@@ -9,15 +9,15 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.myapplication.data.model.MovieModel
 import com.example.myapplication.data.model.MovieModelImpl
-import com.example.myapplication.databinding.FragmentMoviesDetailsBinding
+import com.example.myapplication.databinding.FragmentMovieDetailBinding
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
-class MoviesDetailsFragment : Fragment() {
+class MovieDetailFragment : Fragment() {
 
-    private var _binding: FragmentMoviesDetailsBinding? = null
-    private val args by navArgs<MoviesDetailsFragmentArgs>()
+    private var _binding: FragmentMovieDetailBinding? = null
+    private val args by navArgs<MovieDetailFragmentArgs>()
     lateinit var movieModel: MovieModel
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -29,7 +29,7 @@ class MoviesDetailsFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentMoviesDetailsBinding.inflate(inflater, container, false)
+        _binding = FragmentMovieDetailBinding.inflate(inflater, container, false)
 
         //Toast.makeText(requireContext(),args.id.toString(),Toast.LENGTH_LONG).show()
         return binding.root

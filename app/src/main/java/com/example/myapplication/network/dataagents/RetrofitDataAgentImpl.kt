@@ -15,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitDataAgentImpl : MovieDataAgent {
-    private var movieApi: MovieApi
+    var movieApi: MovieApi
 
     init {
         val okHttpClient = OkHttpClient.Builder()
@@ -38,7 +38,7 @@ object RetrofitDataAgentImpl : MovieDataAgent {
     ) {
         val upComingMoviesCall = movieApi.getUpcomingMovieResponse(ACCESS_TOKEN)
 
-        upComingMoviesCall.enqueue(object : Callback<GetMovieResponse> {
+            upComingMoviesCall.enqueue(object : Callback<GetMovieResponse> {
             override fun onFailure(call: Call<GetMovieResponse>, t: Throwable) {
                 onFailure(t.localizedMessage)
             }

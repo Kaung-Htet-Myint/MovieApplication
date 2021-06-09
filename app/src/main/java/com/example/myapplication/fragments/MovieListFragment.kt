@@ -19,11 +19,10 @@ import com.zhpan.bannerview.BannerViewPager
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class MoviesListFragment : Fragment() {
+class MovieListFragment : Fragment() {
 
     private var _binding: FragmentMoviesListBinding? = null
     private lateinit var movieModel: MovieModel
-    private lateinit var mViewPager: BannerViewPager<ResultsVO>
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -40,58 +39,67 @@ class MoviesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val upcomingListAdapter = MovieListAdapter(onClick = {
+            val upcomingListAdapter = MovieListAdapter(onClick = {
             //Toast.makeText(requireContext(),"Testing",Toast.LENGTH_LONG).show()
-            findNavController().navigate(MoviesListFragmentDirections.actionFirstFragmentToSecondFragment(it.id))
+            findNavController().navigate(MovieListFragmentDirections.actionFirstFragmentToSecondFragment(it.id))
         })
 
         binding.rvUpcomingList.apply {
-            this.layoutManager = LinearLayoutManager(this@MoviesListFragment.context, LinearLayoutManager.HORIZONTAL, false)
+            this.layoutManager = LinearLayoutManager(this@MovieListFragment.context, LinearLayoutManager.HORIZONTAL, false)
             this.adapter = upcomingListAdapter
         }
 
         val popularListAdapter = MovieListAdapter(onClick = {
-           findNavController().navigate(MoviesListFragmentDirections.actionFirstFragmentToSecondFragment(it.id))
+           findNavController().navigate(MovieListFragmentDirections.actionFirstFragmentToSecondFragment(it.id))
         })
         binding.rvPopularList.apply {
-            this.layoutManager = LinearLayoutManager(this@MoviesListFragment.context, LinearLayoutManager.HORIZONTAL,false)
+            this.layoutManager = LinearLayoutManager(this@MovieListFragment.context, LinearLayoutManager.HORIZONTAL,false)
             this.adapter = popularListAdapter
         }
 
         val topRatedListAdapter = MovieListAdapter(onClick = {
-            findNavController().navigate(MoviesListFragmentDirections.actionFirstFragmentToSecondFragment(it.id))
+            findNavController().navigate(MovieListFragmentDirections.actionFirstFragmentToSecondFragment(it.id))
         })
         binding.rvTopRated.apply {
-            this.layoutManager = LinearLayoutManager(this@MoviesListFragment.context, LinearLayoutManager.HORIZONTAL,false)
+            this.layoutManager = LinearLayoutManager(this@MovieListFragment.context, LinearLayoutManager.HORIZONTAL,false)
             this.adapter = topRatedListAdapter
         }
 
+
         movieModel = MovieModelImpl()
         movieModel.getUpcomingMovies(onSuccess = {
-            upcomingListAdapter.movieList = it.results
+            upcomingListAdapter.submitList(it.results)
             setupViewPager(it.results)
-            upcomingListAdapter.notifyDataSetChanged()
         },
         onFailure = {
             Toast.makeText(requireContext(),it,Toast.LENGTH_LONG).show()
         })
 
         movieModel.getPopularMovies(onSuccess = {
-            popularListAdapter.movieList = it.results
-            popularListAdapter.notifyDataSetChanged()
+            popularListAdapter.submitList(it.results)
         },
         onFailure = {
             Toast.makeText(requireContext(),it,Toast.LENGTH_LONG).show()
         })
 
         movieModel.getTopRatedMovies(onSuccess = {
-            topRatedListAdapter.movieList = it.results
-            topRatedListAdapter.notifyDataSetChanged()
+            topRatedListAdapter.submitList(it.results)
         },
         onFailure = {
             Toast.makeText(requireContext(),it,Toast.LENGTH_LONG).show()
         })
 
+        binding.ivSeeMore.setOnClickListener {
+            findNavController().navigate(MovieListFragmentDirections.actionFirstFragmentToThirdFragment())
+        }
+
+        binding.ivPopularSeeMore.setOnClickListener {
+            findNavController().navigate(MovieListFragmentDirections.actionFirstFragmentToPopularSeeMoreFragment())
+        }
+
+        binding.ivTopRatedSeeMore.setOnClickListener {
+            findNavController().navigate(MovieListFragmentDirections.actionFirstFragmentToTopRatedSeeMoreFragment())
+        }
     }
 
     private fun setupViewPager(resultsVO: List<ResultsVO>){
@@ -101,17 +109,6 @@ class MoviesListFragment : Fragment() {
         }.create(resultsVO)
     }
 
-    /*override fun onPause() {
-        if (mViewPager != null)
-            mViewPager.stopLoop()
-        super.onPause()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (mViewPager != null)
-            mViewPager.stopLoop()
-    }*/
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

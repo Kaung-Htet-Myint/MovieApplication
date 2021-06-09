@@ -1,7 +1,6 @@
 package com.example.myapplication.activities
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -11,14 +10,14 @@ import android.view.Menu
 import android.view.MenuItem
 import com.example.myapplication.R
 import com.example.myapplication.databinding.ActivityMainBinding
-import com.example.myapplication.fragments.MoviesListFragment
+import com.example.myapplication.fragments.MovieListFragment
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
-    private val upcomingListFragment = MoviesListFragment()
+    private val upcomingListFragment = MovieListFragment()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

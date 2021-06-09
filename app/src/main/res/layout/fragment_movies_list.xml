@@ -8,7 +8,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".fragments.MoviesListFragment">
+        tools:context=".fragments.MovieListFragment">
 
         <com.zhpan.bannerview.BannerViewPager
             android:id="@+id/banner_view"
@@ -74,6 +74,43 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/rvPopularList"
             app:layout_constraintTop_toBottomOf="@+id/tvTopRated" />
+
+        <ImageView
+            android:id="@+id/ivSeeMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/tvUpcomingList"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.8"
+            app:layout_constraintStart_toEndOf="@+id/tvUpcomingList"
+            app:srcCompat="@drawable/ic_baseline_arrow_forward_24" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="20dp" />
+
+        <ImageView
+            android:id="@+id/ivPopularSeeMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/tvPopularList"
+            app:layout_constraintEnd_toEndOf="@+id/ivSeeMore"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/tvPopularList"
+            app:srcCompat="@drawable/ic_baseline_arrow_forward_24" />
+
+        <ImageView
+            android:id="@+id/ivTopRatedSeeMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="149dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvTopRated"
+            app:layout_constraintEnd_toEndOf="@+id/ivPopularSeeMore"
+            app:layout_constraintStart_toEndOf="@+id/tvTopRated"
+            app:srcCompat="@drawable/ic_baseline_arrow_forward_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

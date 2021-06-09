@@ -7,19 +7,29 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.example.myapplication.fragments.MoviesListFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_movies_list">
+        android:name="com.example.myapplication.fragments.MovieListFragment"
+        android:label="@string/first_fragment_label">
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_ThirdFragment"
+            app:destination="@id/ThirdFragment" />
+
+        <action
+            android:id="@+id/action_FirstFragment_to_PopularSeeMoreFragment"
+            app:destination="@id/PopularSeeMoreFragment" />
+
+        <action
+            android:id="@+id/action_FirstFragment_to_TopRatedSeeMoreFragment"
+            app:destination="@id/TopRatedSeeMoreFragment" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.example.myapplication.fragments.MoviesDetailsFragment"
+        android:name="com.example.myapplication.fragments.MovieDetailFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_movies_details">
+        tools:layout="@layout/fragment_movie_detail">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
@@ -27,5 +37,43 @@
         <argument
             android:name="id"
             app:argType="long" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/ThirdFragment"
+        android:name="com.example.myapplication.fragments.UpcomingSeeMoreFragment"
+        android:label="@string/third_fragment_label"
+        tools:layout="@layout/fragment_upcoming_seemore">
+        <action
+            android:id="@+id/action_ThirdFragment_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+
+        <action
+            android:id="@+id/action_ThirdFragment_to_SecondFragment"
+            app:destination="@id/SecondFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/PopularSeeMoreFragment"
+        android:name="com.example.myapplication.fragments.PopularSeeMoreFragment"
+        android:label="@string/popular_seemore_fragment_label"
+        tools:layout="@layout/fragment_popular_seemore">
+
+        <action
+            android:id="@+id/action_PopularFragement_to_SecondFragment"
+            app:destination="@+id/SecondFragment"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/TopRatedSeeMoreFragment"
+        android:name="com.example.myapplication.fragments.TopRatedSeeMoreFragment"
+        android:label="@string/top_rated_seemore_fragment_label"
+        tools:layout="@layout/fragment_popular_seemore">
+
+        <action
+            android:id="@+id/action_TopRatedFragment_to_SecondFragment"
+            app:destination="@+id/SecondFragment"/>
+
     </fragment>
 </navigation>

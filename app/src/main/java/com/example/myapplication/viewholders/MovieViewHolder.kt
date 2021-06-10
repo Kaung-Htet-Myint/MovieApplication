@@ -10,7 +10,7 @@ import com.example.myapplication.data.vos.ResultsVO
 
 class MovieViewHolder(itemView: View, val onClick: (ResultsVO) -> Unit): RecyclerView.ViewHolder(itemView) {
     fun bind(data: ResultsVO){
-        val url = "https://image.tmdb.org/t/p/w500/"+data.backdrop_path
+        val url = "https://image.tmdb.org/t/p/w500/"+data.poster_path
         itemView.findViewById<TextView>(R.id.tvMovieName).setText(data.original_title)
         Glide.with(itemView.context).load(url)
             .into(itemView.findViewById(R.id.ivMovie))

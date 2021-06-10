@@ -19,9 +19,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPopularSeemore"
-        android:layout_width="409dp"
-        android:layout_height="694dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="32dp"
+        tools:listitem="@layout/movie_item_view"
+        tools:itemCount="6"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvPopularDtail" />

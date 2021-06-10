@@ -1,6 +1,6 @@
 package com.example.myapplication.fragments
 
-import  android.os.Bundle
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,13 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.myapplication.R
 import com.example.myapplication.adapters.UpcomingListPagingAdapter
 import com.example.myapplication.data.model.MovieModel
 import com.example.myapplication.data.model.MovieModelImpl
 import com.example.myapplication.databinding.FragmentUpcomingSeemoreBinding
-
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+
 
 class UpcomingSeeMoreFragment: Fragment() {
     private var _binding: FragmentUpcomingSeemoreBinding? = null
@@ -39,7 +40,8 @@ class UpcomingSeeMoreFragment: Fragment() {
         })
 
         binding.rvSeeMoreDetail.apply {
-            this.layoutManager = GridLayoutManager(context,2)
+            val spacingInPixels = resources.getDimensionPixelSize(R.dimen.spacing)
+            this.addItemDecoration(GridSpacingItemDecoration(2,spacingInPixels,true))
             this.adapter = movieListPaginAdapter
         }
 

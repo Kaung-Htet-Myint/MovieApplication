@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.myapplication.R
 import com.example.myapplication.adapters.TopRatedListPagingAdapter
 import com.example.myapplication.data.model.MovieModel
 import com.example.myapplication.data.model.MovieModelImpl
@@ -36,7 +37,9 @@ class TopRatedSeeMoreFragment: Fragment() {
         })
 
         binding.rvTopRatedSeeMore.apply {
-            this.layoutManager = GridLayoutManager(context,2)
+            val spacingInPixels = resources.getDimensionPixelSize(R.dimen.spacing)
+            this.addItemDecoration(GridSpacingItemDecoration(2,spacingInPixels,true))
+
             this.adapter = topRatedSeeMoreAdapter
         }
 

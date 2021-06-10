@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.myapplication.R
 import com.example.myapplication.adapters.PopularListPagingAdapter
 import com.example.myapplication.data.model.MovieModel
 import com.example.myapplication.data.model.MovieModelImpl
@@ -38,7 +39,9 @@ class PopularSeeMoreFragment: Fragment() {
         })
 
         binding.rvPopularSeemore.apply {
-            this.layoutManager = GridLayoutManager(context,2)
+            val spacingInPixels = resources.getDimensionPixelSize(R.dimen.spacing)
+            this.addItemDecoration(GridSpacingItemDecoration(2,spacingInPixels,true))
+
             this.adapter = popularListPagingAdapter
         }
 

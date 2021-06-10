@@ -13,7 +13,7 @@ import com.example.myapplication.viewholders.MovieViewHolder
 class MovieListAdapter(val onClick: (ResultsVO)-> Unit) : ListAdapter<ResultsVO, MovieViewHolder>(MovieDiff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder{
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.movie_view,parent,false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.movie_item_view,parent,false)
 
         return MovieViewHolder(itemView,onClick)
     }

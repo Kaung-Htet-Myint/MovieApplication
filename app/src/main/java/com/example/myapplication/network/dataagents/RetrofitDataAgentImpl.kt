@@ -4,6 +4,8 @@ import com.example.myapplication.ACCESS_TOKEN
 import com.example.myapplication.BASE_URL
 import com.example.myapplication.data.vos.MovieDetailVO
 import com.example.myapplication.data.vos.MovieVO
+import com.example.myapplication.data.vos.TrandingMoviesVO
+import com.example.myapplication.data.vos.TrandingResultVO
 import com.example.myapplication.network.MovieApi
 import com.example.myapplication.network.responses.*
 import okhttp3.OkHttpClient
@@ -139,6 +141,33 @@ object RetrofitDataAgentImpl : MovieDataAgent {
                     }
                 }else{
                     onFailure("Network Fail!!")
+                }
+            }
+        })
+    }
+
+    override fun getTrandingMovies(
+        onSuccess: (TrandingMoviesVO) -> Unit,
+        onFailure: (String) -> Unit
+    ) {
+        val trandingCall = movieApi.getTrandingResponse(ACCESS_TOKEN)
+        trandingCall.enqueue(object : Callback<GetTrandingMoviesResponse>{
+            override fun onFailure(call: Call<GetTrandingMoviesResponse>, t: Throwable) {
+                onFailure(t.localizedMessage)
+            }
+
+            override fun onResponse(
+                call: Call<GetTrandingMoviesResponse>,
+                response: Response<GetTrandingMoviesResponse>
+            ) {
+                val trandingResponse = response.body()
+
+                if (trandingResponse != null){
+                    if (trandingResponse.results != null){
+                        onSuccess(trandingResponse.asDomain())
+                    }else{
+                        onFailure("Tranding Response Fail!")
+                    }
                 }
             }
         })

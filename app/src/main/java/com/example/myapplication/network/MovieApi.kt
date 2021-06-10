@@ -1,11 +1,9 @@
 package com.example.myapplication.network
 
-import com.example.myapplication.GET_DETAIL
-import com.example.myapplication.GET_POPULAR
-import com.example.myapplication.GET_TOPRATED
-import com.example.myapplication.GET_UPCOMING
+import com.example.myapplication.*
 import com.example.myapplication.network.responses.GetDetailResponse
 import com.example.myapplication.network.responses.GetMovieResponse
+import com.example.myapplication.network.responses.GetTrandingMoviesResponse
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
@@ -29,4 +27,7 @@ interface MovieApi {
 
     @GET(GET_TOPRATED)
     fun getTopRatedResponse(@Query("api_key") apiKey: String): Call<GetMovieResponse>
+
+    @GET(GET_TRANDING)
+    fun getTrandingResponse(@Query("api_key") apiKey: String): Call<GetTrandingMoviesResponse>
 }

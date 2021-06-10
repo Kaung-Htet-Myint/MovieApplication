@@ -13,6 +13,7 @@ import com.example.myapplication.adapters.MovieListAdapter
 import com.example.myapplication.data.model.MovieModel
 import com.example.myapplication.data.model.MovieModelImpl
 import com.example.myapplication.data.vos.ResultsVO
+import com.example.myapplication.data.vos.TrandingResultVO
 import com.example.myapplication.databinding.FragmentMoviesListBinding
 import com.zhpan.bannerview.BannerViewPager
 
@@ -67,12 +68,17 @@ class MovieListFragment : Fragment() {
 
 
         movieModel = MovieModelImpl()
-        movieModel.getUpcomingMovies(onSuccess = {
-            upcomingListAdapter.submitList(it.results)
+        movieModel.getTrandingMovies(onSuccess = {
             setupViewPager(it.results)
         },
         onFailure = {
             Toast.makeText(requireContext(),it,Toast.LENGTH_LONG).show()
+        })
+        movieModel.getUpcomingMovies(onSuccess = {
+            upcomingListAdapter.submitList(it.results)
+        },
+        onFailure = {
+
         })
 
         movieModel.getPopularMovies(onSuccess = {
@@ -102,7 +108,7 @@ class MovieListFragment : Fragment() {
         }
     }
 
-    private fun setupViewPager(resultsVO: List<ResultsVO>){
+    private fun setupViewPager(resultsVO: List<TrandingResultVO>){
         binding.bannerView.let {
             it.setAdapter(MovieBannerAdpter())
             it.setLifecycleRegistry(lifecycle)

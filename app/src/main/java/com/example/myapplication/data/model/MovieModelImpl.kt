@@ -4,6 +4,7 @@ import androidx.paging.*
 import com.example.myapplication.data.vos.MovieDetailVO
 import com.example.myapplication.data.vos.MovieVO
 import com.example.myapplication.data.vos.ResultsVO
+import com.example.myapplication.data.vos.TrandingMoviesVO
 import com.example.myapplication.network.MovieApi
 import com.example.myapplication.network.dataagents.RetrofitDataAgentImpl
 import com.example.myapplication.pagingsources.MoviesPagingSource
@@ -55,6 +56,18 @@ class MovieModelImpl: MovieModel {
 
     override fun getTopRatedMovies(onSuccess: (MovieVO) -> Unit, onFailure: (String) -> Unit) {
         movieDataAgent.getTopRatedMovies(onSuccess={
+            onSuccess(it)
+        },
+        onFailure = {
+            onFailure(it)
+        })
+    }
+
+    override fun getTrandingMovies(
+        onSuccess: (TrandingMoviesVO) -> Unit,
+        onFailure: (String) -> Unit
+    ) {
+        movieDataAgent.getTrandingMovies(onSuccess={
             onSuccess(it)
         },
         onFailure = {

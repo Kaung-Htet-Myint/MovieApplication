@@ -2,6 +2,8 @@ package com.example.myapplication.network.dataagents
 
 import com.example.myapplication.data.vos.MovieDetailVO
 import com.example.myapplication.data.vos.MovieVO
+import com.example.myapplication.data.vos.TrandingMoviesVO
+import com.example.myapplication.data.vos.TrandingResultVO
 
 interface MovieDataAgent {
     fun getUpComingMovies(
@@ -22,6 +24,11 @@ interface MovieDataAgent {
 
     fun getTopRatedMovies(
         onSuccess: (MovieVO) -> Unit,
+        onFailure: (String) -> Unit
+    )
+
+    fun getTrandingMovies(
+        onSuccess: (TrandingMoviesVO) -> Unit,
         onFailure: (String) -> Unit
     )
 }

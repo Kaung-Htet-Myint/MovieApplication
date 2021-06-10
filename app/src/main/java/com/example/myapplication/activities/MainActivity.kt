@@ -8,9 +8,12 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import androidx.navigation.fragment.NavHostFragment
 import com.example.myapplication.R
 import com.example.myapplication.databinding.ActivityMainBinding
 import com.example.myapplication.fragments.MovieListFragment
+import com.example.myapplication.fragments.TrendingFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,10 +33,23 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        /*binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }*/
+        binding.bottomNavigation.setOnNavigationItemSelectedListener { item ->
+            when(item.itemId) {
+                R.id.trendingFragment -> {
+                    navController.navigate(R.id.trendingFragment)
+                    true
+                }
+                R.id.item1 -> {
+                    navController.navigate(R.id.firstFragment)
+                    true
+                }
+                R.id.item2 -> {
+                    navController.navigate(R.id.tvFragment)
+                    true
+                }
+                else -> false
+            }
+        }
 
     }
 

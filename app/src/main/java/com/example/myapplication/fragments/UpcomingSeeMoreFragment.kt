@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 class UpcomingSeeMoreFragment: Fragment() {
     private var _binding: FragmentUpcomingSeemoreBinding? = null
     private lateinit var movieModel: MovieModel
-    private val binding get() = _binding!!
+        private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

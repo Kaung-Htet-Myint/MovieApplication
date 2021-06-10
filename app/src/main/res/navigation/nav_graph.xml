@@ -3,77 +3,85 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
-
+    app:startDestination="@id/trendingFragment">
     <fragment
-        android:id="@+id/FirstFragment"
+        android:id="@+id/firstFragment"
         android:name="com.example.myapplication.fragments.MovieListFragment"
         android:label="@string/first_fragment_label">
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            app:destination="@id/secondFragment" />
         <action
             android:id="@+id/action_FirstFragment_to_ThirdFragment"
-            app:destination="@id/ThirdFragment" />
+            app:destination="@id/thirdFragment" />
 
         <action
             android:id="@+id/action_FirstFragment_to_PopularSeeMoreFragment"
-            app:destination="@id/PopularSeeMoreFragment" />
+            app:destination="@id/popularSeeMoreFragment" />
 
         <action
             android:id="@+id/action_FirstFragment_to_TopRatedSeeMoreFragment"
-            app:destination="@id/TopRatedSeeMoreFragment" />
+            app:destination="@id/topRatedSeeMoreFragment" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
+        android:id="@+id/secondFragment"
         android:name="com.example.myapplication.fragments.MovieDetailFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_movie_detail">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            app:destination="@id/firstFragment" />
         <argument
             android:name="id"
             app:argType="long" />
     </fragment>
 
     <fragment
-        android:id="@+id/ThirdFragment"
+        android:id="@+id/thirdFragment"
         android:name="com.example.myapplication.fragments.UpcomingSeeMoreFragment"
         android:label="@string/third_fragment_label"
         tools:layout="@layout/fragment_upcoming_seemore">
         <action
             android:id="@+id/action_ThirdFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            app:destination="@id/firstFragment" />
 
         <action
             android:id="@+id/action_ThirdFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            app:destination="@id/secondFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/PopularSeeMoreFragment"
+        android:id="@+id/popularSeeMoreFragment"
         android:name="com.example.myapplication.fragments.PopularSeeMoreFragment"
         android:label="@string/popular_seemore_fragment_label"
         tools:layout="@layout/fragment_popular_seemore">
 
         <action
             android:id="@+id/action_PopularFragement_to_SecondFragment"
-            app:destination="@+id/SecondFragment"/>
+            app:destination="@+id/secondFragment"/>
 
     </fragment>
 
     <fragment
-        android:id="@+id/TopRatedSeeMoreFragment"
+        android:id="@+id/topRatedSeeMoreFragment"
         android:name="com.example.myapplication.fragments.TopRatedSeeMoreFragment"
         android:label="@string/top_rated_seemore_fragment_label"
         tools:layout="@layout/fragment_popular_seemore">
 
         <action
             android:id="@+id/action_TopRatedFragment_to_SecondFragment"
-            app:destination="@+id/SecondFragment"/>
+            app:destination="@+id/secondFragment"/>
 
     </fragment>
+    <fragment
+        android:id="@+id/trendingFragment"
+        android:name="com.example.myapplication.fragments.TrendingFragment"
+        android:label="TrendingFragment" />
+    <fragment
+        android:id="@+id/tvFragment"
+        android:name="com.example.myapplication.fragments.TvFragment"
+        android:label="TvFragment" />
+
 </navigation>

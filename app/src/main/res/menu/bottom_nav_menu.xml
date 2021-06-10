@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/trendingFragment"
+        android:title="@string/menu_trending"
+        android:icon="@drawable/ic_baseline_trending_up_white_24"/>
+
+    <item
+        android:id="@+id/item1"
+        android:title="@string/menu_movie"
+        android:icon="@drawable/ic_baseline_movie_filter_white_24"/>
+
+    <item
+        android:id="@+id/item2"
+        android:title="@string/menu_tv"
+        android:icon="@drawable/ic_baseline_tv_white_24"/>
+
+</menu>

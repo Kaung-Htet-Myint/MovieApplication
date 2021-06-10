@@ -28,4 +28,10 @@
 
     <string name="pop_movie_list">Popular Movies List</string>
     <string name="top_rated_list">Top Rated Movies List</string>
+    
+    
+    <string name="menu_trending">Trending</string>
+    <string name="menu_movie">Movie</string>
+    <string name="menu_tv">TV</string>
+
 </resources>

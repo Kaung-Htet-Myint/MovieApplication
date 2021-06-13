@@ -7,9 +7,9 @@ import com.example.myapplication.data.vos.ResultsVO
 import com.example.myapplication.network.MovieApi
 import retrofit2.HttpException
 import java.io.IOException
-import java.lang.Exception
+import kotlin.Exception
 
-class MoviesPagingSource(val backEnd: MovieApi) : PagingSource<Int, ResultsVO>() {
+class MoviesPagingSource(val backEnd: MovieApi,val movieType: String) : PagingSource<Int, ResultsVO>() {
 
     override fun getRefreshKey(state: PagingState<Int, ResultsVO>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
@@ -21,7 +21,15 @@ class MoviesPagingSource(val backEnd: MovieApi) : PagingSource<Int, ResultsVO>()
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ResultsVO> {
         try {
             val currentPageNumber = params.key ?: 1
-                val response = backEnd.getUpcomingMoviePagingResponse(ACCESS_TOKEN, currentPageNumber)
+
+                val response = if (movieType == "upComing")
+                                    backEnd.getUpcomingMoviePagingResponse(ACCESS_TOKEN, currentPageNumber)
+                                else if (movieType == "popular")
+                                    backEnd.getPopularMoviePagingResponse(ACCESS_TOKEN, currentPageNumber)
+                                else if (movieType == "topRated")
+                                    backEnd.getTopRatedMoviePagingResponse(ACCESS_TOKEN,currentPageNumber)
+                                else
+                                    throw Exception("invalid movie type")
 
             return LoadResult.Page(
                 data =  response.body()!!.results,

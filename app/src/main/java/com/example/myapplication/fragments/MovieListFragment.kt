@@ -6,16 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.adapters.MovieBannerAdpter
 import com.example.myapplication.adapters.MovieListAdapter
 import com.example.myapplication.data.model.MovieModel
 import com.example.myapplication.data.model.MovieModelImpl
-import com.example.myapplication.data.vos.ResultsVO
-import com.example.myapplication.data.vos.TrandingResultVO
+import com.example.myapplication.data.vos.TrendingResultVO
 import com.example.myapplication.databinding.FragmentMoviesListBinding
-import com.zhpan.bannerview.BannerViewPager
+import com.example.myapplication.domain.Trending
+import com.example.myapplication.viewmodels.MovieListViewModel
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -23,7 +24,12 @@ import com.zhpan.bannerview.BannerViewPager
 class MovieListFragment : Fragment() {
 
     private var _binding: FragmentMoviesListBinding? = null
-    private lateinit var movieModel: MovieModel
+
+    private val upComingViewModel : MovieListViewModel by viewModels()
+    private val popularViewModel : MovieListViewModel by viewModels()
+    private val topRatedViewModel : MovieListViewModel by viewModels()
+    private val allTrendingViewModel : MovieListViewModel by viewModels()
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -66,34 +72,25 @@ class MovieListFragment : Fragment() {
             this.adapter = topRatedListAdapter
         }
 
+        allTrendingViewModel.loadAllTrending(mediaType = "all", timeWindow = "day")
+        allTrendingViewModel.allTrendingLiveData.observe(viewLifecycleOwner){
+            setupViewPager(it)
+        }
 
-        movieModel = MovieModelImpl()
-        movieModel.getTrandingMovies(onSuccess = {
-            setupViewPager(it.results)
-        },
-        onFailure = {
-            Toast.makeText(requireContext(),it,Toast.LENGTH_LONG).show()
-        })
-        movieModel.getUpcomingMovies(onSuccess = {
+        upComingViewModel.loadUpComingList()
+        upComingViewModel.upComingMoviesLiveData.observe(viewLifecycleOwner){
             upcomingListAdapter.submitList(it.results)
-        },
-        onFailure = {
+        }
 
-        })
-
-        movieModel.getPopularMovies(onSuccess = {
+        popularViewModel.loadPopularList()
+        popularViewModel.popularMoviesLiveData.observe(viewLifecycleOwner){
             popularListAdapter.submitList(it.results)
-        },
-        onFailure = {
-            Toast.makeText(requireContext(),it,Toast.LENGTH_LONG).show()
-        })
+        }
 
-        movieModel.getTopRatedMovies(onSuccess = {
+        topRatedViewModel.loadTopRatedList()
+        topRatedViewModel.topRatedMoviesLiveData.observe(viewLifecycleOwner){
             topRatedListAdapter.submitList(it.results)
-        },
-        onFailure = {
-            Toast.makeText(requireContext(),it,Toast.LENGTH_LONG).show()
-        })
+        }
 
         binding.ivSeeMore.setOnClickListener {
             findNavController().navigate(MovieListFragmentDirections.actionFirstFragmentToThirdFragment())
@@ -108,11 +105,11 @@ class MovieListFragment : Fragment() {
         }
     }
 
-    private fun setupViewPager(resultsVO: List<TrandingResultVO>){
+    private fun setupViewPager(result: List<Trending>){
         binding.bannerView.let {
             it.setAdapter(MovieBannerAdpter())
             it.setLifecycleRegistry(lifecycle)
-        }.create(resultsVO)
+        }.create(result)
     }
 
     override fun onDestroyView() {

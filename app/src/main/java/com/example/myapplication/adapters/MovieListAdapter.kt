@@ -2,10 +2,7 @@ package com.example.myapplication.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.myapplication.R
 import com.example.myapplication.data.vos.ResultsVO
 import com.example.myapplication.viewholders.MovieViewHolder
@@ -13,7 +10,7 @@ import com.example.myapplication.viewholders.MovieViewHolder
 class MovieListAdapter(val onClick: (ResultsVO)-> Unit) : ListAdapter<ResultsVO, MovieViewHolder>(MovieDiff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder{
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.movie_item_view,parent,false)
+            val itemView = LayoutInflater.from(parent.context).inflate(R.layout.movie_item_view,parent,false)
 
         return MovieViewHolder(itemView,onClick)
     }

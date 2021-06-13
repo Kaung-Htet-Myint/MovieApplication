@@ -1,6 +1,6 @@
 package com.example.myapplication.data.vos
 
-class TrandingMoviesVO(
+class AllTrendingVO(
     val page: Int,
-    val results: List<TrandingResultVO>
+    val results: List<TrendingResultVO>
 )

@@ -1,31 +1,19 @@
 package com.example.myapplication.data.model
 
+import android.content.Context
 import androidx.paging.*
-import com.example.myapplication.data.vos.MovieDetailVO
-import com.example.myapplication.data.vos.MovieVO
-import com.example.myapplication.data.vos.ResultsVO
-import com.example.myapplication.data.vos.TrandingMoviesVO
+import com.example.myapplication.data.vos.*
+import com.example.myapplication.domain.Trending
 import com.example.myapplication.network.MovieApi
 import com.example.myapplication.network.dataagents.RetrofitDataAgentImpl
 import com.example.myapplication.pagingsources.MoviesPagingSource
 import kotlinx.coroutines.flow.Flow
 
-class MovieModelImpl: MovieModel {
-    var movieDataAgent = RetrofitDataAgentImpl
-    private var backEnd: MovieApi = RetrofitDataAgentImpl.movieApi
-    override fun getUpcomingMovies(
-        onSuccess: (MovieVO) -> Unit,
-        onFailure: (String) -> Unit
-    ) {
-        movieDataAgent.getUpComingMovies(onSuccess = {
-            onSuccess(it)
-        },
-        onFailure = {
-            onFailure(it)
-        })
-    }
+class MovieModelImpl(context: Context): MovieModel {
+    var movieDataAgent = RetrofitDataAgentImpl(context)
+    private var backEnd: MovieApi = RetrofitDataAgentImpl(context).movieApi
 
-    override fun getMoviesPagingMovies(): Flow<PagingData<ResultsVO>> {
+    /*override fun getMoviesPagingMovies(): Flow<PagingData<ResultsVO>> {
         val flow =  Pager(
             PagingConfig(pageSize = 20)
         ){
@@ -33,45 +21,5 @@ class MovieModelImpl: MovieModel {
         }.flow
 
         return flow
-    }
-
-
-    override fun getMovieDetail(id: Long, onSuccess: (MovieDetailVO) -> Unit, onFailure: (String) -> Unit) {
-        movieDataAgent.getMovieDetail(id, onSuccess = {
-            onSuccess(it)
-        },
-        onFailure = {
-            onFailure(it)
-        })
-    }
-
-    override fun getPopularMovies(onSuccess: (MovieVO) -> Unit, onFailure: (String) -> Unit) {
-        movieDataAgent.getPopularMoives(onSuccess = {
-            onSuccess(it)
-        },
-        onFailure = {
-            onFailure(it)
-        })
-    }
-
-    override fun getTopRatedMovies(onSuccess: (MovieVO) -> Unit, onFailure: (String) -> Unit) {
-        movieDataAgent.getTopRatedMovies(onSuccess={
-            onSuccess(it)
-        },
-        onFailure = {
-            onFailure(it)
-        })
-    }
-
-    override fun getTrandingMovies(
-        onSuccess: (TrandingMoviesVO) -> Unit,
-        onFailure: (String) -> Unit
-    ) {
-        movieDataAgent.getTrandingMovies(onSuccess={
-            onSuccess(it)
-        },
-        onFailure = {
-            onFailure(it)
-        })
-    }
+    }*/
 }

@@ -1,34 +1,23 @@
 package com.example.myapplication.network.dataagents
 
-import com.example.myapplication.data.vos.MovieDetailVO
-import com.example.myapplication.data.vos.MovieVO
-import com.example.myapplication.data.vos.TrandingMoviesVO
-import com.example.myapplication.data.vos.TrandingResultVO
+import androidx.paging.PagingData
+import com.example.myapplication.data.vos.*
+import com.example.myapplication.domain.Trending
+import com.example.myapplication.network.responses.TrendingDto
+import com.example.myapplication.network.responses.TrendingResponse
+import kotlinx.coroutines.flow.Flow
 
 interface MovieDataAgent {
-    fun getUpComingMovies(
-        onSuccess: (MovieVO) -> Unit,
-        onFailure: (String) -> Unit
-    )
+    suspend fun getUpComingMovies(): MovieVO
 
-    fun getMovieDetail(
-        id: Long,
-        onSuccess: (MovieDetailVO) -> Unit,
-        onFailure: (String) -> Unit
-    )
+    suspend fun getMovieDetail(id: Long): MovieDetailVO
 
-    fun getPopularMoives(
-        onSuccess: (MovieVO) -> Unit,
-        onFailure: (String) -> Unit
-    )
+    suspend fun getPopularMovies(): MovieVO
 
-    fun getTopRatedMovies(
-        onSuccess: (MovieVO) -> Unit,
-        onFailure: (String) -> Unit
-    )
+    suspend fun getTopRatedMovies(): MovieVO
 
-    fun getTrandingMovies(
-        onSuccess: (TrandingMoviesVO) -> Unit,
-        onFailure: (String) -> Unit
-    )
+    suspend fun getAllTrending(mediaType: String,timeWindow: String): List<Trending>
+
+    suspend fun getPagingMovies(movieType: String): Flow<PagingData<ResultsVO>>
+
 }

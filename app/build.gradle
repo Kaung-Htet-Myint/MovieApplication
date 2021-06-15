@@ -2,10 +2,8 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-}
-
-plugins {
-    id("androidx.navigation.safeargs")
+    id 'dagger.hilt.android.plugin'
+    id 'androidx.navigation.safeargs'
 }
 
 android {
@@ -84,5 +82,9 @@ dependencies {
 
     // Annotation processor
     implementation("androidx.lifecycle:lifecycle-common-java8:2.3.1")
+
+    //hilt
+    implementation("com.google.dagger:hilt-android:2.35")
+    kapt("com.google.dagger:hilt-android-compiler:2.35")
 
 }

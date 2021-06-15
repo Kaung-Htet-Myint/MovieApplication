@@ -1,12 +1,9 @@
 package com.example.myapplication.network
 
 import com.example.myapplication.*
-import com.example.myapplication.domain.Trending
 import com.example.myapplication.network.responses.GetDetailResponse
 import com.example.myapplication.network.responses.GetMovieResponse
-import com.example.myapplication.network.responses.TrendingDto
 import com.example.myapplication.network.responses.TrendingResponse
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -42,5 +39,4 @@ interface MovieApi {
     suspend fun getTrendingResponse(@Path("media_type")mediaType: String,
                             @Path("time_window")timeWindow: String,
                             @Query("api_key") apiKey: String): TrendingResponse
-
 }

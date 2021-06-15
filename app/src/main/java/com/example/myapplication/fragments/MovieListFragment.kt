@@ -6,29 +6,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.adapters.MovieBannerAdpter
 import com.example.myapplication.adapters.MovieListAdapter
-import com.example.myapplication.data.model.MovieModel
-import com.example.myapplication.data.model.MovieModelImpl
-import com.example.myapplication.data.vos.TrendingResultVO
 import com.example.myapplication.databinding.FragmentMoviesListBinding
 import com.example.myapplication.domain.Trending
+import com.example.myapplication.utils.ViewState
 import com.example.myapplication.viewmodels.MovieListViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import java.lang.Error
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
+
+@AndroidEntryPoint
 class MovieListFragment : Fragment() {
 
     private var _binding: FragmentMoviesListBinding? = null
-
-    private val upComingViewModel : MovieListViewModel by viewModels()
-    private val popularViewModel : MovieListViewModel by viewModels()
-    private val topRatedViewModel : MovieListViewModel by viewModels()
-    private val allTrendingViewModel : MovieListViewModel by viewModels()
+    private val movieViewModel : MovieListViewModel by viewModels()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -72,24 +72,84 @@ class MovieListFragment : Fragment() {
             this.adapter = topRatedListAdapter
         }
 
-        allTrendingViewModel.loadAllTrending(mediaType = "all", timeWindow = "day")
-        allTrendingViewModel.allTrendingLiveData.observe(viewLifecycleOwner){
-            setupViewPager(it)
+        movieViewModel.loadAllTrending(mediaType = "all", timeWindow = "day")
+        movieViewModel.allTrendingLiveData.observe(viewLifecycleOwner){
+            when(it){
+                is ViewState.Loading -> {
+                    binding.pbMovieList.isVisible = true
+                    binding.gpMovieList.isVisible = false
+                }
+                is ViewState.Successs -> {
+                    binding.pbMovieList.isVisible = false
+                    binding.gpMovieList.isVisible = true
+
+                    setupViewPager(it.data)
+                }
+                is ViewState.Error -> {
+                    binding.pbMovieList.isVisible = false
+                    Toast.makeText(requireContext(),it.error.message,Toast.LENGTH_LONG).show()
+                }
+            }
+
         }
 
-        upComingViewModel.loadUpComingList()
-        upComingViewModel.upComingMoviesLiveData.observe(viewLifecycleOwner){
-            upcomingListAdapter.submitList(it.results)
+        movieViewModel.loadUpComingList()
+        movieViewModel.upComingMoviesLiveData.observe(viewLifecycleOwner){
+            when(it){
+                is ViewState.Loading ->{
+                    binding.pbMovieList.isVisible = true
+                    binding.gpMovieList.isVisible = false
+                }
+                is ViewState.Successs ->{
+                    binding.pbMovieList.isVisible = false
+                    binding.gpMovieList.isVisible = true
+                    upcomingListAdapter.submitList(it.data.results)
+                }
+                is ViewState.Error ->{
+                    binding.pbMovieList.isVisible = false
+                    Toast.makeText(requireContext(), it.error.message, Toast.LENGTH_LONG).show()
+                }
+            }
         }
 
-        popularViewModel.loadPopularList()
-        popularViewModel.popularMoviesLiveData.observe(viewLifecycleOwner){
-            popularListAdapter.submitList(it.results)
+        movieViewModel.loadPopularList()
+        movieViewModel.popularMoviesLiveData.observe(viewLifecycleOwner){
+            when(it){
+                is ViewState.Loading ->{
+                    binding.pbMovieList.isVisible = true
+                    binding.gpMovieList.isVisible = false
+                }
+                is ViewState.Successs ->{
+                    binding.pbMovieList.isVisible = false
+                    binding.gpMovieList.isVisible = true
+                    popularListAdapter.submitList(it.data.results)
+                }
+                is ViewState.Error ->{
+                    binding.pbMovieList.isVisible = false
+                    Toast.makeText(requireContext(), it.error.message, Toast.LENGTH_LONG).show()
+                }
+            }
+
         }
 
-        topRatedViewModel.loadTopRatedList()
-        topRatedViewModel.topRatedMoviesLiveData.observe(viewLifecycleOwner){
-            topRatedListAdapter.submitList(it.results)
+        movieViewModel.loadTopRatedList()
+        movieViewModel.topRatedMoviesLiveData.observe(viewLifecycleOwner){
+            when(it){
+                is ViewState.Loading ->{
+                    binding.pbMovieList.isVisible = true
+                    binding.gpMovieList.isVisible = false
+                }
+                is ViewState.Successs ->{
+                    binding.pbMovieList.isVisible = false
+                    binding.gpMovieList.isVisible = true
+                    topRatedListAdapter.submitList(it.data.results)
+                }
+                is ViewState.Error ->{
+                    binding.pbMovieList.isVisible = false
+                   Toast.makeText(requireContext(),it.error.message, Toast.LENGTH_LONG).show()
+                }
+            }
+
         }
 
         binding.ivSeeMore.setOnClickListener {

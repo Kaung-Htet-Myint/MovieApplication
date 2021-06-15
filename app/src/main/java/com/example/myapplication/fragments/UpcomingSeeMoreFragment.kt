@@ -10,16 +10,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.myapplication.R
 import com.example.myapplication.adapters.UpcomingListPagingAdapter
-import com.example.myapplication.data.model.MovieModel
-import com.example.myapplication.data.model.MovieModelImpl
 import com.example.myapplication.databinding.FragmentUpcomingSeemoreBinding
 import com.example.myapplication.viewmodels.PagingUpComingViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-
+@AndroidEntryPoint
 class UpcomingSeeMoreFragment: Fragment() {
     private var _binding: FragmentUpcomingSeemoreBinding? = null
-    private lateinit var movieModel: MovieModel
     private val binding get() = _binding!!
 
     private val pagingUpComingViewModel: PagingUpComingViewModel by viewModels()
@@ -39,7 +37,6 @@ class UpcomingSeeMoreFragment: Fragment() {
         val movieListPaginAdapter = UpcomingListPagingAdapter(onClick = {
             findNavController().navigate(UpcomingSeeMoreFragmentDirections.actionThirdFragmentToSecondFragment(it.id))
         })
-        movieModel = MovieModelImpl(requireContext())
 
         pagingUpComingViewModel.loadPagingMovies("upComing")
         viewLifecycleOwner.lifecycleScope.launch {

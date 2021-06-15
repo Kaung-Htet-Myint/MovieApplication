@@ -1,20 +1,33 @@
 package com.example.myapplication.viewmodels
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.data.vos.MovieDetailVO
 import com.example.myapplication.network.dataagents.RetrofitDataAgentImpl
+import com.example.myapplication.utils.ViewState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MovieDetailViewModel(private val app: Application): AndroidViewModel(app) {
-    val detailLiveData : MutableLiveData<MovieDetailVO> = MutableLiveData()
+@HiltViewModel
+class MovieDetailViewModel @Inject constructor(val retrofitDataAgentImpl: RetrofitDataAgentImpl) :
+    ViewModel() {
+    private val _detailLiveData =  MutableLiveData<ViewState<MovieDetailVO>>()
+    val detailLiveData: LiveData<ViewState<MovieDetailVO>>
 
-    fun loadDetail(id: Long){
-        val retrofitDataAgentImpl = RetrofitDataAgentImpl(app)
+    get() = _detailLiveData
+
+    fun loadDetail(id: Long) {
         viewModelScope.launch {
-            detailLiveData.value = retrofitDataAgentImpl.getMovieDetail(id)
+
+            try {
+                _detailLiveData.value = ViewState.Loading
+                _detailLiveData.value = ViewState.Successs(retrofitDataAgentImpl.getMovieDetail(id))
+            }catch (e: Exception){
+                _detailLiveData.value = ViewState.Error(e)
+            }
         }
     }
 }

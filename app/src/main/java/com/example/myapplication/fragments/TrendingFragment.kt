@@ -11,11 +11,12 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.R
 import com.example.myapplication.adapters.TrendingListAdapter
-import com.example.myapplication.data.model.MovieModel
-import com.example.myapplication.data.model.MovieModelImpl
 import com.example.myapplication.databinding.FragmentTrendingBinding
+import com.example.myapplication.utils.ViewState
 import com.example.myapplication.viewmodels.TrendingViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TrendingFragment: Fragment() {
     private var _binding: FragmentTrendingBinding? = null
     private val binding get() = _binding!!
@@ -64,17 +65,63 @@ class TrendingFragment: Fragment() {
         }
 
         trendingViewModel.trendingMovieLiveData.observe(viewLifecycleOwner){
-            trendingMovieListAdapter.submitList(it)
+            when(it){
+                is ViewState.Loading -> {
+                    binding.pbTrending.isVisible = true
+                    binding.gpTrending.isVisible = false
+                }
+                is ViewState.Successs ->{
+                    binding.pbTrending.isVisible = false
+                    binding.gpTrending.isVisible = true
+
+                    trendingMovieListAdapter.submitList(it.data)
+                }
+                is ViewState.Error ->{
+                    binding.pbTrending.isVisible = false
+                    Toast.makeText(requireContext(),it.error.message,Toast.LENGTH_LONG).show()
+                }
+            }
+
             //binding.pbTrendingMovies.isVisible = true
         }
 
         trendingViewModel.trendingTvLiveData.observe(viewLifecycleOwner){
-            trendingTvListAdapter.submitList(it)
+            when(it){
+                is ViewState.Loading -> {
+                    binding.pbTrending.isVisible = true
+                    binding.gpTrending.isVisible = false
+                }
+                is ViewState.Successs ->{
+                    binding.pbTrending.isVisible = false
+                    binding.gpTrending.isVisible = true
+
+                    trendingTvListAdapter.submitList(it.data)
+                }
+                is ViewState.Error ->{
+                    binding.pbTrending.isVisible = false
+                    Toast.makeText(requireContext(),it.error.message,Toast.LENGTH_LONG).show()
+                }
+            }
             //binding.pbTrendingMovies.isVisible = true
         }
 
         trendingViewModel.trendingPersonLiveData.observe(viewLifecycleOwner){
-            trendingPersonAdapter.submitList(it)
+            when(it){
+                is ViewState.Loading -> {
+                    binding.pbTrending.isVisible = true
+                    binding.gpTrending.isVisible = false
+                }
+                is ViewState.Successs ->{
+                    binding.pbTrending.isVisible = false
+                    binding.gpTrending.isVisible = true
+
+                    trendingPersonAdapter.submitList(it.data)
+                }
+                is ViewState.Error ->{
+                    binding.pbTrending.isVisible = false
+                    Toast.makeText(requireContext(),it.error.message,Toast.LENGTH_LONG).show()
+                }
+            }
             //binding.pbTrendingMovies.isVisible = true
         }
 

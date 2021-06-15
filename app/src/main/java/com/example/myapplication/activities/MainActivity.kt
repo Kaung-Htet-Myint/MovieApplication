@@ -14,7 +14,9 @@ import com.example.myapplication.databinding.ActivityMainBinding
 import com.example.myapplication.fragments.MovieListFragment
 import com.example.myapplication.fragments.TrendingFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration

@@ -7,13 +7,26 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         tools:context=".fragments.MovieListFragment">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ProgressBar
+                android:id="@+id/pbMovieList"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center" />
+        </FrameLayout>
 
         <com.zhpan.bannerview.BannerViewPager
             android:id="@+id/banner_view"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
+            android:layout_height="170dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -113,6 +126,12 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/tvTopRated"
             app:srcCompat="@drawable/ic_baseline_arrow_forward_24" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/gpMovieList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="banner_view,rvUpcomingList,rvPopularList,rvTopRated" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

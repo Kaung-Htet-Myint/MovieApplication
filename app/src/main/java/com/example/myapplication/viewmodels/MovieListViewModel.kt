@@ -1,30 +1,40 @@
 package com.example.myapplication.viewmodels
 
-import android.app.Application
 import androidx.lifecycle.*
-import com.example.myapplication.data.vos.MovieVO
+import com.example.myapplication.data.vos.asEntity
 import com.example.myapplication.domain.Trending
 import com.example.myapplication.network.dataagents.RetrofitDataAgentImpl
+import com.example.myapplication.persistance.AppDatabase
+import com.example.myapplication.persistance.entities.MovieEntity
 import com.example.myapplication.utils.ViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class MovieListViewModel @Inject constructor(
-    val retrofitDataAgentImpl: RetrofitDataAgentImpl
+    val retrofitDataAgentImpl: RetrofitDataAgentImpl,
+    val appDatabase : AppDatabase
 ) : ViewModel() {
-    private val _upComingMoviesLiveData = MutableLiveData<ViewState<MovieVO>>()
-    val upComingMoviesLiveData: LiveData<ViewState<MovieVO>>
+
+    init {
+        saveUpComingList()
+        savePopularList()
+        saveTopRatedList()
+    }
+
+    private val _upComingMoviesLiveData = MutableLiveData<ViewState<List<MovieEntity>>>()
+    val upComingMoviesLiveData: LiveData<ViewState<List<MovieEntity>>>
     get() = _upComingMoviesLiveData
 
-    private val _popularMoviesLiveData = MutableLiveData<ViewState<MovieVO>>()
-    val popularMoviesLiveData: LiveData<ViewState<MovieVO>>
+    private val _popularMoviesLiveData = MutableLiveData<ViewState<List<MovieEntity>>>()
+    val popularMoviesLiveData: LiveData<ViewState<List<MovieEntity>>>
     get() = _popularMoviesLiveData
 
-    private val _topRatedMoviesLiveData = MutableLiveData<ViewState<MovieVO>>()
-    val topRatedMoviesLiveData: LiveData<ViewState<MovieVO>>
+    private val _topRatedMoviesLiveData = MutableLiveData<ViewState<List<MovieEntity>>>()
+    val topRatedMoviesLiveData: LiveData<ViewState<List<MovieEntity>>>
     get() = _topRatedMoviesLiveData
 
     private val _allTrendingLiveData = MutableLiveData<ViewState<List<Trending>>>()
@@ -36,11 +46,25 @@ class MovieListViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _upComingMoviesLiveData.value = ViewState.Loading
-                _upComingMoviesLiveData.value = ViewState.Successs(retrofitDataAgentImpl.getUpComingMovies())
+                _upComingMoviesLiveData.value = ViewState.Successs(
+                    withContext(Dispatchers.IO){
+                        appDatabase.movieDao().getMovies()
+                    })
+
             }catch (e: Exception){
                 _upComingMoviesLiveData.value = ViewState.Error(e)
             }
+        }
+    }
 
+    fun saveUpComingList(){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                retrofitDataAgentImpl.getUpComingMovies().also {
+                    appDatabase.movieDao().insertAllMovies(it.results.map {resultVO ->
+                        resultVO.asEntity() })
+                }
+            }
         }
     }
 
@@ -48,9 +72,23 @@ class MovieListViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _popularMoviesLiveData.value = ViewState.Loading
-                _popularMoviesLiveData.value = ViewState.Successs(retrofitDataAgentImpl.getPopularMovies())
+                _popularMoviesLiveData.value = ViewState.Successs(
+                    withContext(Dispatchers.IO){
+                        appDatabase.movieDao().getMovies()
+                    })
             }catch (e: Exception){
                 _popularMoviesLiveData.value = ViewState.Error(e)
+            }
+        }
+    }
+
+    fun savePopularList(){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                retrofitDataAgentImpl.getPopularMovies().also {
+                    appDatabase.movieDao().insertAllMovies(it.results.map { resultVO ->
+                        resultVO.asEntity() })
+                }
             }
         }
     }
@@ -59,13 +97,27 @@ class MovieListViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _topRatedMoviesLiveData.value = ViewState.Loading
-                _topRatedMoviesLiveData.value = ViewState.Successs(retrofitDataAgentImpl.getTopRatedMovies())
+                _topRatedMoviesLiveData.value = ViewState.Successs(
+                    withContext(Dispatchers.IO){
+                        appDatabase.movieDao().getMovies()
+                    }
+                )
             }catch (e: Exception){
                 _topRatedMoviesLiveData.value = ViewState.Error(e)
             }
         }
     }
 
+    fun saveTopRatedList(){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                retrofitDataAgentImpl.getTopRatedMovies().also {
+                    appDatabase.movieDao().insertAllMovies(retrofitDataAgentImpl.getTopRatedMovies().results.map { resultVO->
+                        resultVO.asEntity() })
+                }
+            }
+        }
+    }
     fun loadAllTrending(mediaType: String, timeWindow: String) {
 
         viewModelScope.launch {

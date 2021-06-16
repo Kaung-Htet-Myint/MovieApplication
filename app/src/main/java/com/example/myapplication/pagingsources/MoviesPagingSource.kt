@@ -4,21 +4,23 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.myapplication.ACCESS_TOKEN
 import com.example.myapplication.data.vos.ResultsVO
+import com.example.myapplication.data.vos.asEntity
 import com.example.myapplication.network.MovieApi
+import com.example.myapplication.persistance.entities.MovieEntity
 import retrofit2.HttpException
 import java.io.IOException
 import kotlin.Exception
 
-class MoviesPagingSource(val backEnd: MovieApi,val movieType: String) : PagingSource<Int, ResultsVO>() {
+class MoviesPagingSource(val backEnd: MovieApi,val movieType: String) : PagingSource<Int, MovieEntity>() {
 
-    override fun getRefreshKey(state: PagingState<Int, ResultsVO>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, MovieEntity>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ResultsVO> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieEntity> {
         try {
             val currentPageNumber = params.key ?: 1
 
@@ -32,7 +34,7 @@ class MoviesPagingSource(val backEnd: MovieApi,val movieType: String) : PagingSo
                                     throw Exception("invalid movie type")
 
             return LoadResult.Page(
-                data =  response.body()!!.results,
+                data =  response.body()!!.results.map { it.asEntity() },
                 prevKey = if (currentPageNumber == 1) null else currentPageNumber.minus(1),
                 nextKey = if (currentPageNumber < response.body()!!.total_pages) currentPageNumber.plus(1) else null
             )

@@ -12,6 +12,7 @@ import com.example.myapplication.domain.TrendingMapper
 import com.example.myapplication.network.MovieApi
 import com.example.myapplication.network.responses.*
 import com.example.myapplication.pagingsources.MoviesPagingSource
+import com.example.myapplication.persistance.entities.MovieEntity
 import com.readystatesoftware.chuck.ChuckInterceptor
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -50,7 +51,7 @@ class RetrofitDataAgentImpl @Inject constructor(var movieApi: MovieApi) {
         return trendingMapper.map(response.results)
     }
 
-    fun getPagingMovies(movieType: String): Flow<PagingData<ResultsVO>> {
+    fun getPagingMovies(movieType: String): Flow<PagingData<MovieEntity>> {
         val flow =  Pager(
             PagingConfig(pageSize = 20)
         ){

@@ -7,14 +7,15 @@ import com.bumptech.glide.Glide
 import com.example.myapplication.R
 import com.example.myapplication.data.vos.MovieVO
 import com.example.myapplication.data.vos.ResultsVO
+import com.example.myapplication.persistance.entities.MovieEntity
 
-class MovieViewHolder(itemView: View, val onClick: (ResultsVO) -> Unit): RecyclerView.ViewHolder(itemView) {
-    fun bind(data: ResultsVO){
-        val url = "https://image.tmdb.org/t/p/w500/"+data.poster_path
+class MovieViewHolder(itemView: View, val onClick: (MovieEntity) -> Unit): RecyclerView.ViewHolder(itemView) {
+    fun bind(data: MovieEntity){
+        val url = "https://image.tmdb.org/t/p/w500/"+data.backdropPath
         Glide.with(itemView.context).load(url)
             .into(itemView.findViewById(R.id.ivMovie))
 
-        itemView.findViewById<TextView>(R.id.tvMovieName).setText(data.original_title)
+        itemView.findViewById<TextView>(R.id.tvMovieName).setText(data.originalTitle)
         itemView.setOnClickListener {
             onClick(data)
         }

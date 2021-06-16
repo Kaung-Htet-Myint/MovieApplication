@@ -103,7 +103,7 @@ class MovieListFragment : Fragment() {
                 is ViewState.Successs ->{
                     binding.pbMovieList.isVisible = false
                     binding.gpMovieList.isVisible = true
-                    upcomingListAdapter.submitList(it.data.results)
+                    upcomingListAdapter.submitList(it.data)
                 }
                 is ViewState.Error ->{
                     binding.pbMovieList.isVisible = false
@@ -122,7 +122,7 @@ class MovieListFragment : Fragment() {
                 is ViewState.Successs ->{
                     binding.pbMovieList.isVisible = false
                     binding.gpMovieList.isVisible = true
-                    popularListAdapter.submitList(it.data.results)
+                    popularListAdapter.submitList(it.data)
                 }
                 is ViewState.Error ->{
                     binding.pbMovieList.isVisible = false
@@ -142,7 +142,7 @@ class MovieListFragment : Fragment() {
                 is ViewState.Successs ->{
                     binding.pbMovieList.isVisible = false
                     binding.gpMovieList.isVisible = true
-                    topRatedListAdapter.submitList(it.data.results)
+                    topRatedListAdapter.submitList(it.data)
                 }
                 is ViewState.Error ->{
                     binding.pbMovieList.isVisible = false

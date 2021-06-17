@@ -9,23 +9,17 @@ import com.example.myapplication.persistance.daos.TrendingDao
 import com.example.myapplication.persistance.entities.MovieEntity
 import com.example.myapplication.persistance.entities.TrendingEntity
 
-@Database(entities = arrayOf(MovieEntity::class, TrendingEntity::class), version = 2)
+@Database(entities = arrayOf(MovieEntity::class, TrendingEntity::class), version = 1, exportSchema = false)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun movieDao(): MovieDao
     abstract fun trenidngDao(): TrendingDao
 
     companion object {
-        private var appDbInstance: AppDatabase? = null
-
-        fun getAppDatabase(context: Context): AppDatabase{
-            if (appDbInstance == null){
-                appDbInstance = Room.databaseBuilder(
-                    context,
-                    AppDatabase::class.java, "AppDatabase"
-                ).build()
-            }
-
-            return appDbInstance!!
+        fun create(applicationContext: Context): AppDatabase {
+            return Room.databaseBuilder(
+                applicationContext,
+                AppDatabase::class.java, "database-name"
+            ).build()
         }
     }
 }

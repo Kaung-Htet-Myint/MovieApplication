@@ -16,10 +16,10 @@ data class ResultsVO(
     val video: Boolean,
     val vote_average: Float,
     val vote_count: Long,
-    val media_type: String,
+    val media_type: String
 )
 
-fun ResultsVO.asEntity(): MovieEntity {
+fun ResultsVO.asEntity(movieType: String): MovieEntity {
     return MovieEntity(
         id,
         backdrop_path,
@@ -34,6 +34,6 @@ fun ResultsVO.asEntity(): MovieEntity {
         video,
         vote_average,
         vote_count,
-        media_type
+        movieType
     )
 }

@@ -34,7 +34,7 @@ class MoviesPagingSource(val backEnd: MovieApi,val movieType: String) : PagingSo
                                     throw Exception("invalid movie type")
 
             return LoadResult.Page(
-                data =  response.body()!!.results.map { it.asEntity() },
+                data =  response.body()!!.results.map { it.asEntity(movieType) },
                 prevKey = if (currentPageNumber == 1) null else currentPageNumber.minus(1),
                 nextKey = if (currentPageNumber < response.body()!!.total_pages) currentPageNumber.plus(1) else null
             )

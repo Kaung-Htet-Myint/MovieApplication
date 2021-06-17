@@ -25,99 +25,61 @@ class MovieListViewModel @Inject constructor(
         saveTopRatedList()
     }
 
-    private val _upComingMoviesLiveData = MutableLiveData<ViewState<List<MovieEntity>>>()
-    val upComingMoviesLiveData: LiveData<ViewState<List<MovieEntity>>>
-    get() = _upComingMoviesLiveData
+    val upComingMoviesLiveData = appDatabase.movieDao().getUpComingMovies("upComing")
 
-    private val _popularMoviesLiveData = MutableLiveData<ViewState<List<MovieEntity>>>()
-    val popularMoviesLiveData: LiveData<ViewState<List<MovieEntity>>>
-    get() = _popularMoviesLiveData
+    val popularMoviesLiveData = appDatabase.movieDao().getPopularMovies("popular")
 
-    private val _topRatedMoviesLiveData = MutableLiveData<ViewState<List<MovieEntity>>>()
-    val topRatedMoviesLiveData: LiveData<ViewState<List<MovieEntity>>>
-    get() = _topRatedMoviesLiveData
+    val topRatedMoviesLiveData = appDatabase.movieDao().getTopRatedMovies("topRated")
 
     private val _allTrendingLiveData = MutableLiveData<ViewState<List<Trending>>>()
     val allTrendingLiveData: LiveData<ViewState<List<Trending>>>
     get() = _allTrendingLiveData
 
-
-    fun loadUpComingList() {
-        viewModelScope.launch {
-            try {
-                _upComingMoviesLiveData.value = ViewState.Loading
-                _upComingMoviesLiveData.value = ViewState.Successs(
-                    withContext(Dispatchers.IO){
-                        appDatabase.movieDao().getMovies()
-                    })
-
-            }catch (e: Exception){
-                _upComingMoviesLiveData.value = ViewState.Error(e)
-            }
-        }
-    }
-
     fun saveUpComingList(){
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                retrofitDataAgentImpl.getUpComingMovies().also {
-                    appDatabase.movieDao().insertAllMovies(it.results.map {resultVO ->
-                        resultVO.asEntity() })
-                }
-            }
-        }
-    }
-
-    fun loadPopularList() {
-        viewModelScope.launch {
             try {
-                _popularMoviesLiveData.value = ViewState.Loading
-                _popularMoviesLiveData.value = ViewState.Successs(
-                    withContext(Dispatchers.IO){
-                        appDatabase.movieDao().getMovies()
-                    })
-            }catch (e: Exception){
-                _popularMoviesLiveData.value = ViewState.Error(e)
+                withContext(Dispatchers.IO){
+                    retrofitDataAgentImpl.getUpComingMovies().also {
+                        appDatabase.movieDao().insertAllMovies(it.results.map {resultVO ->
+                            resultVO.asEntity("upComing") })
+                    }
+                }
+            } catch (e: Exception) {
+
             }
         }
     }
 
     fun savePopularList(){
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                retrofitDataAgentImpl.getPopularMovies().also {
-                    appDatabase.movieDao().insertAllMovies(it.results.map { resultVO ->
-                        resultVO.asEntity() })
-                }
-            }
-        }
-    }
-
-    fun loadTopRatedList() {
-        viewModelScope.launch {
             try {
-                _topRatedMoviesLiveData.value = ViewState.Loading
-                _topRatedMoviesLiveData.value = ViewState.Successs(
-                    withContext(Dispatchers.IO){
-                        appDatabase.movieDao().getMovies()
+                withContext(Dispatchers.IO){
+                    retrofitDataAgentImpl.getPopularMovies().also {
+                        appDatabase.movieDao().insertAllMovies(it.results.map { resultVO ->
+                            resultVO.asEntity("popular") })
                     }
-                )
+                }
             }catch (e: Exception){
-                _topRatedMoviesLiveData.value = ViewState.Error(e)
+
             }
         }
     }
 
     fun saveTopRatedList(){
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                retrofitDataAgentImpl.getTopRatedMovies().also {
-                    appDatabase.movieDao().insertAllMovies(retrofitDataAgentImpl.getTopRatedMovies().results.map { resultVO->
-                        resultVO.asEntity() })
+            try {
+                withContext(Dispatchers.IO){
+                    retrofitDataAgentImpl.getTopRatedMovies().also {
+                        appDatabase.movieDao().insertAllMovies(retrofitDataAgentImpl.getTopRatedMovies().results.map { resultVO->
+                            resultVO.asEntity("topRated") })
+                    }
                 }
+            }catch (e: Exception){
+
             }
         }
     }
+
     fun loadAllTrending(mediaType: String, timeWindow: String) {
 
         viewModelScope.launch {

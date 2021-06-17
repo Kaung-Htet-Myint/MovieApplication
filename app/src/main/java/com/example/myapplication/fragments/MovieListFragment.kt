@@ -93,63 +93,22 @@ class MovieListFragment : Fragment() {
 
         }
 
-        movieViewModel.loadUpComingList()
         movieViewModel.upComingMoviesLiveData.observe(viewLifecycleOwner){
-            when(it){
-                is ViewState.Loading ->{
-                    binding.pbMovieList.isVisible = true
-                    binding.gpMovieList.isVisible = false
-                }
-                is ViewState.Successs ->{
                     binding.pbMovieList.isVisible = false
                     binding.gpMovieList.isVisible = true
-                    upcomingListAdapter.submitList(it.data)
-                }
-                is ViewState.Error ->{
-                    binding.pbMovieList.isVisible = false
-                    Toast.makeText(requireContext(), it.error.message, Toast.LENGTH_LONG).show()
-                }
-            }
+                    upcomingListAdapter.submitList(it)
         }
 
-        movieViewModel.loadPopularList()
         movieViewModel.popularMoviesLiveData.observe(viewLifecycleOwner){
-            when(it){
-                is ViewState.Loading ->{
-                    binding.pbMovieList.isVisible = true
-                    binding.gpMovieList.isVisible = false
-                }
-                is ViewState.Successs ->{
                     binding.pbMovieList.isVisible = false
                     binding.gpMovieList.isVisible = true
-                    popularListAdapter.submitList(it.data)
-                }
-                is ViewState.Error ->{
-                    binding.pbMovieList.isVisible = false
-                    Toast.makeText(requireContext(), it.error.message, Toast.LENGTH_LONG).show()
-                }
-            }
-
+                    popularListAdapter.submitList(it)
         }
 
-        movieViewModel.loadTopRatedList()
         movieViewModel.topRatedMoviesLiveData.observe(viewLifecycleOwner){
-            when(it){
-                is ViewState.Loading ->{
-                    binding.pbMovieList.isVisible = true
-                    binding.gpMovieList.isVisible = false
-                }
-                is ViewState.Successs ->{
                     binding.pbMovieList.isVisible = false
                     binding.gpMovieList.isVisible = true
-                    topRatedListAdapter.submitList(it.data)
-                }
-                is ViewState.Error ->{
-                    binding.pbMovieList.isVisible = false
-                   Toast.makeText(requireContext(),it.error.message, Toast.LENGTH_LONG).show()
-                }
-            }
-
+                    topRatedListAdapter.submitList(it)
         }
 
         binding.ivSeeMore.setOnClickListener {

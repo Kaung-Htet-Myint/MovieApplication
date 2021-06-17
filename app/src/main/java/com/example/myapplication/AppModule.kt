@@ -1,7 +1,8 @@
-package com.example.myapplication.network
+package com.example.myapplication
 
 import android.content.Context
-import com.example.myapplication.BASE_URL
+import com.example.myapplication.network.MovieApi
+import com.example.myapplication.persistance.AppDatabase
 import com.readystatesoftware.chuck.ChuckInterceptor
 import dagger.Module
 import dagger.Provides
@@ -18,13 +19,13 @@ import java.util.concurrent.TimeUnit
 class AppModule {
 
     @Provides
-    fun provideMovieApi(retrofit: Retrofit): MovieApi{
+    fun provideMovieApi(retrofit: Retrofit): MovieApi {
 
         return retrofit.create(MovieApi::class.java)
     }
 
     @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit{
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create())
@@ -34,7 +35,7 @@ class AppModule {
     }
 
     @Provides
-    fun provideOkHttpClient(@ApplicationContext context: Context): OkHttpClient{
+    fun provideOkHttpClient(@ApplicationContext context: Context): OkHttpClient {
         val okHttpClient = OkHttpClient.Builder()
             .connectTimeout(15, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -43,5 +44,9 @@ class AppModule {
             .build()
         return okHttpClient
     }
-    
+
+    @Provides
+    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
+        return AppDatabase.create(context)
+    }
 }

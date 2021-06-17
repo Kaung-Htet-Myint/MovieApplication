@@ -22,5 +22,5 @@ data class MovieEntity @JvmOverloads constructor(
     val video: Boolean,
     val voteAverage: Float,
     val voteCount: Long,
-    val mediaType: String
+    val movieType: String
 )

@@ -2,6 +2,7 @@ package com.example.myapplication.network
 
 import com.example.myapplication.*
 import com.example.myapplication.network.responses.GetDetailResponse
+import com.example.myapplication.network.responses.GetMovieGenreResponse
 import com.example.myapplication.network.responses.GetMovieResponse
 import com.example.myapplication.network.responses.TrendingResponse
 import retrofit2.Response
@@ -17,6 +18,11 @@ interface MovieApi {
     @GET(GET_UPCOMING)
     suspend fun getUpcomingMoviePagingResponse(@Query("api_key") apiKey: String,
                                          @Query("page")page: Int): Response<GetMovieResponse>
+
+    @GET(GET_DISCOVER)
+    suspend fun getDiscoverResponse(@Query("api_key") apiKey: String,
+                                    @Query("page")page: Int,
+                                    @Query("with_genres") withGenres: Int): Response<GetMovieResponse>
 
     @GET(GET_DETAIL)
     suspend fun getMovieDetail(@Path("id") movieId: Long,@Query("api_key") apiKey: String): GetDetailResponse
@@ -39,4 +45,12 @@ interface MovieApi {
     suspend fun getTrendingResponse(@Path("media_type")mediaType: String,
                             @Path("time_window")timeWindow: String,
                             @Query("api_key") apiKey: String): TrendingResponse
+
+    @GET(GET_SEARCH)
+    suspend fun getSearchResponse(@Query("api_key") apiKey: String,
+                                @Query("query") query: String): GetMovieResponse
+
+    @GET(GET_MOVIE_GENRES)
+    suspend fun getMovieGenreResponse(@Query("api_key") apiKey: String): GetMovieGenreResponse
+
 }

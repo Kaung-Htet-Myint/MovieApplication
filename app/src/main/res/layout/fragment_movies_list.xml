@@ -53,12 +53,12 @@
             android:id="@+id/tvUpcomingList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:text="@string/upcoming_movies_list"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/banner_view" />
+            app:layout_constraintTop_toBottomOf="@+id/rvMovieFilter" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvUpcomingList"
@@ -131,6 +131,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:constraint_referenced_ids="banner_view,rvUpcomingList,rvPopularList,rvTopRated" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMovieFilter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/banner_view" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

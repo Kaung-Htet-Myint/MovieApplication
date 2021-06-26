@@ -5,10 +5,10 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.example.myapplication.R
-import com.example.myapplication.persistance.entities.MovieEntity
+import com.example.myapplication.data.vos.Movie
 import com.example.myapplication.viewholders.MovieViewHolder
 
-class UpcomingListPagingAdapter(val onClick: (MovieEntity)-> Unit): PagingDataAdapter<MovieEntity, MovieViewHolder>(MovieDiff) {
+class UpcomingListPagingAdapter(val onClick: (Movie)-> Unit): PagingDataAdapter<Movie, MovieViewHolder>(MovieDiff) {
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val item = getItem(position)
@@ -21,13 +21,13 @@ class UpcomingListPagingAdapter(val onClick: (MovieEntity)-> Unit): PagingDataAd
     }
 }
 
-object MovieDiff : DiffUtil.ItemCallback<MovieEntity>() {
-    override fun areItemsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean {
+object MovieDiff : DiffUtil.ItemCallback<Movie>() {
+    override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
         // Id is unique.
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean {
+    override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
         return oldItem == newItem
     }
 }

@@ -10,7 +10,10 @@ import com.example.myapplication.data.vos.*
 import com.example.myapplication.domain.Trending
 import com.example.myapplication.domain.TrendingMapper
 import com.example.myapplication.network.MovieApi
+import com.example.myapplication.network.dto.MovieDto
+import com.example.myapplication.network.dto.asDomain
 import com.example.myapplication.network.responses.*
+import com.example.myapplication.pagingsources.GenresPagingSource
 import com.example.myapplication.pagingsources.MoviesPagingSource
 import com.example.myapplication.persistance.entities.MovieEntity
 import com.readystatesoftware.chuck.ChuckInterceptor
@@ -24,8 +27,22 @@ import javax.inject.Inject
 
 class RetrofitDataAgentImpl @Inject constructor(var movieApi: MovieApi) {
 
-    suspend fun getUpComingMovies(): MovieVO {
+    suspend fun getUpComingMovies(): List<Movie> {
         val response = movieApi.getUpcomingMovieResponse(ACCESS_TOKEN)
+        return response.results.map {
+            it.asDomain()
+        }
+    }
+
+    suspend fun getSearchMovies(query: String): List<Movie> {
+        val response = movieApi.getSearchResponse(ACCESS_TOKEN,query)
+        return response.results.map {
+            it.asDomain()
+        }
+    }
+
+    suspend fun getMovieGenre():MovieGenreVO{
+        val response = movieApi.getMovieGenreResponse(ACCESS_TOKEN)
         return response.asDomain()
     }
 
@@ -34,14 +51,18 @@ class RetrofitDataAgentImpl @Inject constructor(var movieApi: MovieApi) {
         return response.asDomain()
     }
 
-    suspend fun getPopularMovies(): MovieVO {
+    suspend fun getPopularMovies(): List<Movie> {
         val response = movieApi.getPopularResponse(ACCESS_TOKEN)
-        return response.asDomain()
+        return response.results.map {
+            it.asDomain()
+        }
     }
 
-    suspend fun getTopRatedMovies(): MovieVO {
+    suspend fun getTopRatedMovies(): List<Movie> {
         val response = movieApi.getTopRatedResponse(ACCESS_TOKEN)
-        return response.asDomain()
+        return response.results.map {
+            it.asDomain()
+        }
     }
 
     suspend fun getAllTrending(mediaType: String, timeWindow: String): List<Trending> {
@@ -51,11 +72,21 @@ class RetrofitDataAgentImpl @Inject constructor(var movieApi: MovieApi) {
         return trendingMapper.map(response.results)
     }
 
-    fun getPagingMovies(movieType: String): Flow<PagingData<MovieEntity>> {
+    fun getPagingMovies(movieType: String): Flow<PagingData<Movie>> {
         val flow =  Pager(
             PagingConfig(pageSize = 20)
         ){
             MoviesPagingSource(movieApi, movieType)
+        }.flow
+
+        return flow
+    }
+
+    fun getGenreMovies(genrId: Int): Flow<PagingData<Movie>>{
+        val flow =  Pager(
+            PagingConfig(pageSize = 20)
+        ){
+            GenresPagingSource(movieApi,genrId)
         }.flow
 
         return flow

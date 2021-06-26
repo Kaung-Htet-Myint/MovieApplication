@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.myapplication.R
 import com.example.myapplication.adapters.TopRatedListPagingAdapter
 import com.example.myapplication.databinding.FragmentTopRatedSeemoreBinding
-import com.example.myapplication.viewmodels.TopRatedViewModel
+import com.example.myapplication.viewmodels.PagingTopRatedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 class TopRatedSeeMoreFragment : Fragment() {
     private var _binding: FragmentTopRatedSeemoreBinding? = null
     private val binding get() = _binding!!
-    private val topRatedViewModel: TopRatedViewModel by viewModels()
+    private val pagingTopRatedViewModel: PagingTopRatedViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,15 +34,15 @@ class TopRatedSeeMoreFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val topRatedSeeMoreAdapter = TopRatedListPagingAdapter(onClick = {
             findNavController().navigate(
-                TopRatedSeeMoreFragmentDirections.actionTopRatedFragmentToSecondFragment(
+                TopRatedSeeMoreFragmentDirections.actionTopRatedSeeMoreFragmentToDetailFragment(
                     it.id
                 )
             )
         })
 
-        topRatedViewModel.loadTopRated("topRated")
+        pagingTopRatedViewModel.loadTopRated("topRated")
         viewLifecycleOwner.lifecycleScope.launch {
-            topRatedViewModel.topRatedMovieFlow?.collectLatest {
+            pagingTopRatedViewModel.topRatedMovieFlow?.collectLatest {
                 topRatedSeeMoreAdapter.submitData(it)
             }
         }

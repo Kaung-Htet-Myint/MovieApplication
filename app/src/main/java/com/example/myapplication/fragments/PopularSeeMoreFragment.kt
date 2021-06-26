@@ -34,7 +34,7 @@ class PopularSeeMoreFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val popularListPagingAdapter = PopularListPagingAdapter(onClick ={
-            findNavController().navigate(PopularSeeMoreFragmentDirections.actionPopularFragementToSecondFragment(it.id))
+            findNavController().navigate(PopularSeeMoreFragmentDirections.actionPopularSeeMoreFragementToDetailFragment(it.id))
         })
 
         popularViewModel.loadPopular("popular")

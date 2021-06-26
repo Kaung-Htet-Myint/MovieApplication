@@ -4,13 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.example.myapplication.R
-import com.example.myapplication.persistance.entities.MovieEntity
+import com.example.myapplication.data.vos.Movie
 import com.example.myapplication.viewholders.MovieViewHolder
 
-class MovieListAdapter(val onClick: (MovieEntity)-> Unit) : ListAdapter<MovieEntity, MovieViewHolder>(MovieDiff) {
+class MovieListAdapter(val onClick: (Movie)-> Unit) : ListAdapter<Movie, MovieViewHolder>(MovieDiff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder{
-            val itemView = LayoutInflater.from(parent.context).inflate(R.layout.movie_item_view,parent,false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.movie_item_view,parent,false)
 
         return MovieViewHolder(itemView,onClick)
     }

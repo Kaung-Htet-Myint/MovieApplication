@@ -1,11 +1,14 @@
 package com.example.myapplication.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.*
+import com.example.myapplication.data.vos.MovieGenreVO
+import com.example.myapplication.data.vos.Movie
 import com.example.myapplication.data.vos.asEntity
 import com.example.myapplication.domain.Trending
 import com.example.myapplication.network.dataagents.RetrofitDataAgentImpl
 import com.example.myapplication.persistance.AppDatabase
-import com.example.myapplication.persistance.entities.MovieEntity
+import com.example.myapplication.persistance.entities.*
 import com.example.myapplication.utils.ViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieListViewModel @Inject constructor(
     val retrofitDataAgentImpl: RetrofitDataAgentImpl,
-    val appDatabase : AppDatabase
+    val appDatabase: AppDatabase
 ) : ViewModel() {
 
     init {
@@ -25,23 +28,76 @@ class MovieListViewModel @Inject constructor(
         saveTopRatedList()
     }
 
-    val upComingMoviesLiveData = appDatabase.movieDao().getUpComingMovies("upComing")
+    val upComingMoviesLiveData = appDatabase.movieDao().getMovies("upComing").map {
+        it.map {
+            it.asDomain()
+        }
+    }
 
-    val popularMoviesLiveData = appDatabase.movieDao().getPopularMovies("popular")
+    val popularMoviesLiveData = appDatabase.movieDao().getMovies("popular").map {
+        it.map {
+            it.asDomain()
+        }
+    }
 
-    val topRatedMoviesLiveData = appDatabase.movieDao().getTopRatedMovies("topRated")
+    val topRatedMoviesLiveData = appDatabase.movieDao().getMovies("topRated").map {
+        it.map {
+            it.asDomain()
+        }
+    }
 
     private val _allTrendingLiveData = MutableLiveData<ViewState<List<Trending>>>()
     val allTrendingLiveData: LiveData<ViewState<List<Trending>>>
-    get() = _allTrendingLiveData
+        get() = _allTrendingLiveData
 
-    fun saveUpComingList(){
+    private val _movieGenresLiveData = MutableLiveData<MovieGenreVO>()
+    val movieGenresLiveData: LiveData<MovieGenreVO>
+    get() = _movieGenresLiveData
+
+    fun saveUpComingList() {
         viewModelScope.launch {
             try {
-                withContext(Dispatchers.IO){
+                withContext(Dispatchers.IO) {
                     retrofitDataAgentImpl.getUpComingMovies().also {
-                        appDatabase.movieDao().insertAllMovies(it.results.map {resultVO ->
-                            resultVO.asEntity("upComing") })
+                        // save movie entities
+                        appDatabase.movieDao().insertAllMovies(it.map { resultVO ->
+                            resultVO.asEntity("upComing")
+                        })
+
+                        // save movie genres
+                        val movieGeneres: List<GenreEntity> = it.flatMap { resultsVO ->
+                            resultsVO.genreIds.map {
+                                GenreEntity(it)
+                            }
+                        }
+                        appDatabase.genreDao().insert(movieGeneres)
+
+                        // save movie and genres join table
+                        val movieAndGenres: List<MovieGenreEntity> = it.flatMap { movie ->
+                            movie.genreIds.map { genreId ->
+                                MovieGenreEntity(
+                                    id = "upComing"+movie.id.toString(),
+                                    genreId = genreId
+                                )
+                            }
+                        }
+                        appDatabase.movieWithGenre().insert(movieAndGenres)
+                    }
+                }
+            } catch (e: Exception) {
+                    Log.e("abc",e.message.orEmpty())
+            }
+        }
+    }
+
+    fun savePopularList() {
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    retrofitDataAgentImpl.getPopularMovies().also {
+                        appDatabase.movieDao().insertAllMovies(it.map { resultVO ->
+                            resultVO.asEntity("popular")
+                        })
                     }
                 }
             } catch (e: Exception) {
@@ -50,31 +106,18 @@ class MovieListViewModel @Inject constructor(
         }
     }
 
-    fun savePopularList(){
+    fun saveTopRatedList() {
         viewModelScope.launch {
             try {
-                withContext(Dispatchers.IO){
-                    retrofitDataAgentImpl.getPopularMovies().also {
-                        appDatabase.movieDao().insertAllMovies(it.results.map { resultVO ->
-                            resultVO.asEntity("popular") })
-                    }
-                }
-            }catch (e: Exception){
-
-            }
-        }
-    }
-
-    fun saveTopRatedList(){
-        viewModelScope.launch {
-            try {
-                withContext(Dispatchers.IO){
+                withContext(Dispatchers.IO) {
                     retrofitDataAgentImpl.getTopRatedMovies().also {
-                        appDatabase.movieDao().insertAllMovies(retrofitDataAgentImpl.getTopRatedMovies().results.map { resultVO->
-                            resultVO.asEntity("topRated") })
+                        appDatabase.movieDao()
+                            .insertAllMovies(retrofitDataAgentImpl.getTopRatedMovies().map { resultVO ->
+                                resultVO.asEntity("topRated")
+                            })
                     }
                 }
-            }catch (e: Exception){
+            } catch (e: Exception) {
 
             }
         }
@@ -85,10 +128,87 @@ class MovieListViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _allTrendingLiveData.value = ViewState.Loading
-                _allTrendingLiveData.value = ViewState.Successs(retrofitDataAgentImpl.getAllTrending(mediaType,timeWindow))
-            }catch (e: Exception){
+                _allTrendingLiveData.value =
+                    ViewState.Successs(retrofitDataAgentImpl.getAllTrending(mediaType, timeWindow))
+            } catch (e: Exception) {
                 _allTrendingLiveData.value = ViewState.Error(e)
             }
         }
     }
+
+    fun loadMovieGenre(){
+        viewModelScope.launch {
+            try {
+                _movieGenresLiveData.value = retrofitDataAgentImpl.getMovieGenre()
+            }catch (e: Exception){
+                Log.e("Movie Genre call Fail",e.message.orEmpty())
+            }
+        }
+    }
+}
+
+fun MoviesWithGenre.asDomain(): Movie {
+    return Movie(
+        backdropPath = movie.backdropPath,
+        genreIds = genre.map {
+            it.genreId
+        },
+        id = movie.movieId,
+        originalLanguage = movie.originalLanguage,
+        originalTitle = movie.originalTitle,
+        overview = movie.overview,
+        popularity = movie.popularity,
+        posterPath = movie.posterPath,
+        releaseDate = movie.releaseDate,
+        title = movie.title,
+        video = movie.video,
+        voteAverage = movie.voteAverage,
+        voteCount = movie.voteCount
+    )
+}
+
+fun MovieEntity.asDomain(genreId: List<Int>): Movie {
+    return Movie(
+        backdropPath = backdropPath,
+        genreIds = genreId,
+        id = movieId,
+        originalLanguage = originalLanguage,
+        originalTitle = originalTitle,
+        overview = overview,
+        popularity = popularity,
+        posterPath = posterPath,
+        releaseDate = releaseDate,
+        title = title,
+        video = video,
+        voteAverage = voteAverage,
+        voteCount = voteCount
+    )
+}
+
+fun GenreWithMovies.asDomain(): List<Movie> {
+    val movieEntities = this.movie
+    // god style
+    return movieEntities.map {
+        it.asDomain(listOf(genre.genreId))
+    }
+/*
+    // junior kids
+    val movieDomainList: MutableList<ResultsVO> = mutableListOf()
+
+    for (i in movieEntities.indices) {
+        val movieDomain = movieEntities.get(i).asDomain(listOf(genre.genreId))
+        movieDomainList.add(movieDomain)
+    }
+
+    return movieDomainList*/
+}
+
+fun <I, O> List<I>.myMap(op: (I) -> O): List<O> {
+    val outputList: MutableList<O> = mutableListOf()
+
+    for (i in this.indices) {
+        outputList.add(op(this[i]))
+    }
+
+    return outputList
 }

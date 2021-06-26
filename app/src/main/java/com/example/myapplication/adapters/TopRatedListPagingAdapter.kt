@@ -4,11 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import com.example.myapplication.R
-import com.example.myapplication.data.vos.ResultsVO
-import com.example.myapplication.persistance.entities.MovieEntity
+import com.example.myapplication.data.vos.Movie
 import com.example.myapplication.viewholders.MovieViewHolder
 
-class TopRatedListPagingAdapter(val onClick: (MovieEntity)-> Unit): PagingDataAdapter<MovieEntity,MovieViewHolder>(MovieDiff) {
+class TopRatedListPagingAdapter(val onClick: (Movie)-> Unit): PagingDataAdapter<Movie,MovieViewHolder>(MovieDiff) {
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val item = getItem(position)
         item?.let { holder.bind(it) }

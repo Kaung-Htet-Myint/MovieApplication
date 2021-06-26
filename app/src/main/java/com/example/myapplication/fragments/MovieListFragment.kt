@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.myapplication.adapters.FilterAdapter
 import com.example.myapplication.adapters.MovieBannerAdpter
 import com.example.myapplication.adapters.MovieListAdapter
 import com.example.myapplication.databinding.FragmentMoviesListBinding
@@ -18,7 +18,6 @@ import com.example.myapplication.domain.Trending
 import com.example.myapplication.utils.ViewState
 import com.example.myapplication.viewmodels.MovieListViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.Error
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -48,7 +47,7 @@ class MovieListFragment : Fragment() {
 
             val upcomingListAdapter = MovieListAdapter(onClick = {
             //Toast.makeText(requireContext(),"Testing",Toast.LENGTH_LONG).show()
-            findNavController().navigate(MovieListFragmentDirections.actionFirstFragmentToSecondFragment(it.id))
+            findNavController().navigate(MovieListFragmentDirections.actionMovieListFragmentToDetailFragment(it.id))
         })
 
         binding.rvUpcomingList.apply {
@@ -57,7 +56,7 @@ class MovieListFragment : Fragment() {
         }
 
         val popularListAdapter = MovieListAdapter(onClick = {
-           findNavController().navigate(MovieListFragmentDirections.actionFirstFragmentToSecondFragment(it.id))
+           findNavController().navigate(MovieListFragmentDirections.actionMovieListFragmentToDetailFragment(it.id))
         })
         binding.rvPopularList.apply {
             this.layoutManager = LinearLayoutManager(this@MovieListFragment.context, LinearLayoutManager.HORIZONTAL,false)
@@ -65,11 +64,28 @@ class MovieListFragment : Fragment() {
         }
 
         val topRatedListAdapter = MovieListAdapter(onClick = {
-            findNavController().navigate(MovieListFragmentDirections.actionFirstFragmentToSecondFragment(it.id))
+            findNavController().navigate(MovieListFragmentDirections.actionMovieListFragmentToDetailFragment(it.id))
         })
         binding.rvTopRated.apply {
             this.layoutManager = LinearLayoutManager(this@MovieListFragment.context, LinearLayoutManager.HORIZONTAL,false)
             this.adapter = topRatedListAdapter
+        }
+
+        val movieFilterAdapter = FilterAdapter(onClick = {
+
+            findNavController().navigate(MovieListFragmentDirections.actionMovieListFragmentToGenreFragment(it.id,it.name))
+            val genreId = it.id
+
+        })
+
+        binding.rvMovieFilter.apply {
+            this.layoutManager = LinearLayoutManager(this@MovieListFragment.context, LinearLayoutManager.HORIZONTAL,false)
+            this.adapter = movieFilterAdapter
+        }
+
+        movieViewModel.loadMovieGenre()
+        movieViewModel.movieGenresLiveData.observe(viewLifecycleOwner){
+            movieFilterAdapter.submitList(it.genres)
         }
 
         movieViewModel.loadAllTrending(mediaType = "all", timeWindow = "day")
@@ -112,15 +128,15 @@ class MovieListFragment : Fragment() {
         }
 
         binding.ivSeeMore.setOnClickListener {
-            findNavController().navigate(MovieListFragmentDirections.actionFirstFragmentToThirdFragment())
+            findNavController().navigate(MovieListFragmentDirections.actionMovieListFragmentToUpComingSeeMoreFragment())
         }
 
         binding.ivPopularSeeMore.setOnClickListener {
-            findNavController().navigate(MovieListFragmentDirections.actionFirstFragmentToPopularSeeMoreFragment())
+            findNavController().navigate(MovieListFragmentDirections.actionMovieListFragmentToPopularSeeMoreFragment())
         }
 
         binding.ivTopRatedSeeMore.setOnClickListener {
-            findNavController().navigate(MovieListFragmentDirections.actionFirstFragmentToTopRatedSeeMoreFragment())
+            findNavController().navigate(MovieListFragmentDirections.actionMovieListFragmentToTopRatedSeeMoreFragment())
         }
     }
 

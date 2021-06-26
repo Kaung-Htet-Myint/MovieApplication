@@ -8,12 +8,11 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
-import androidx.navigation.fragment.NavHostFragment
+import androidx.activity.viewModels
+import androidx.navigation.Navigation
 import com.example.myapplication.R
 import com.example.myapplication.databinding.ActivityMainBinding
-import com.example.myapplication.fragments.MovieListFragment
-import com.example.myapplication.fragments.TrendingFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.myapplication.viewmodels.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,8 +20,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private val searchViewModel : SearchViewModel by viewModels()
 
-    private val upcomingListFragment = MovieListFragment()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -30,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
+        //supportActionBar?.setDisplayShowTitleEnabled(false)
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.item1 -> {
-                    navController.navigate(R.id.firstFragment)
+                    navController.navigate(R.id.movieListFragment)
                     true
                 }
                 R.id.item2 -> {
@@ -55,9 +55,24 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        binding.ivSearch.setOnClickListener {
+           // it.findNavController().navigate(R.id.searchFragment)
+            Navigation.findNavController(this, R.id.nav_host_fragment_content_main).navigate(R.id.searchFragment)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
+
         return true
     }
 

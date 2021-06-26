@@ -1,17 +1,14 @@
 package com.example.myapplication.persistance.entities
 
-import androidx.room.Entity
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
+import androidx.room.*
 
 @Entity
-data class MovieEntity @JvmOverloads constructor(
+data class MovieEntity(
     @PrimaryKey
-    val id: Long,
-    val backdropPath: String,
+    val id : String,
 
-    @Ignore
-    val genreIds: List<Int> = emptyList(),
+    val movieId: Long,
+    val backdropPath: String,
     val originalLanguage: String,
     val originalTitle: String,
     val overview: String,
@@ -24,3 +21,40 @@ data class MovieEntity @JvmOverloads constructor(
     val voteCount: Long,
     val movieType: String
 )
+
+@Entity
+data class GenreEntity(
+    @PrimaryKey
+    val genreId : Int
+)
+
+@Entity(primaryKeys = ["id","genreId"])
+data class MovieGenreEntity(
+    val id: String,
+    val genreId : Int
+)
+
+
+data class MoviesWithGenre(
+    @Embedded val movie: MovieEntity,
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "genreId",
+        associateBy = Junction(MovieGenreEntity::class)
+    )
+    val genre : List<GenreEntity>
+)
+
+
+data class GenreWithMovies(
+    @Embedded val genre: GenreEntity,
+    @Relation(
+        parentColumn = "genreId",
+        entityColumn = "id",
+        associateBy = Junction(MovieGenreEntity::class)
+    )
+    val movie : List<MovieEntity>
+)
+
+
+

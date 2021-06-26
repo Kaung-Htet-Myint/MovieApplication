@@ -35,7 +35,7 @@ class UpcomingSeeMoreFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val movieListPaginAdapter = UpcomingListPagingAdapter(onClick = {
-            findNavController().navigate(UpcomingSeeMoreFragmentDirections.actionThirdFragmentToSecondFragment(it.id))
+            findNavController().navigate(UpcomingSeeMoreFragmentDirections.actionUpComingSeeMoreFragmentToDetailFragment(it.id))
         })
 
         pagingUpComingViewModel.loadPagingMovies("upComing")

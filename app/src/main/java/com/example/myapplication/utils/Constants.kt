@@ -7,3 +7,7 @@ const val GET_DETAIL = "3/movie/{id}"
 const val GET_POPULAR = "3/movie/popular"
 const val GET_TOPRATED = "3/movie/top_rated"
 const val GET_TRENDING = "3/trending/{media_type}/{time_window}"
+const val GET_SEARCH = "3/search/movie"
+const val GET_MOVIE_GENRES = "3/genre/movie/list"
+const val GET_DISCOVER = "3/discover/movie"
+

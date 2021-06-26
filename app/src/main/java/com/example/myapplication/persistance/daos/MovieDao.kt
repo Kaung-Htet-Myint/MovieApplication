@@ -1,23 +1,16 @@
 package com.example.myapplication.persistance.daos
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.example.myapplication.persistance.entities.MovieEntity
+import com.example.myapplication.persistance.entities.MoviesWithGenre
 
 @Dao
 interface MovieDao {
+    @Transaction
     @Query("SELECT * FROM MovieEntity WHERE movieType = :type")
-    fun getUpComingMovies(type: String): LiveData<List<MovieEntity>>
+    fun getMovies(type: String): LiveData<List<MoviesWithGenre>>
 
-    @Query("SELECT * FROM MovieEntity WHERE movieType = :type")
-    fun getPopularMovies(type: String): LiveData<List<MovieEntity>>
-
-    @Query("SELECT * FROM MovieEntity WHERE movieType= :type")
-    fun getTopRatedMovies(type: String): LiveData<List<MovieEntity>>
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllMovies(moviesEntity: List<MovieEntity>)
 }

@@ -16,6 +16,7 @@
     <string name="upcoming_movies_list">Upcoming Movies List</string>
     <string name="popular_movies_list">Popular Movies List</string>
     <string name="movie_name">Movie Name</string>
+    <string name="genre_type">Genre type</string>
     <string name="year">2021</string>
     <string name="overview">
         "Spider-Man" centers on student Peter Parker (Tobey Maguire) who, after being bitten by
@@ -33,5 +34,14 @@
     <string name="menu_trending">Trending</string>
     <string name="menu_movie">Movie</string>
     <string name="menu_tv">TV</string>
+    <string name="search_title">Movie</string>
+    <string name="search_hint">Movie</string>
+    <string name="overview_sample">
+        "Spider-Man" centers on student Peter Parker (Tobey Maguire) who, after being bitten by a genetically-altered
+        spider, gains superhuman strength and the spider-like ability to cling to any surface. He vows to use his abilities
+        to fight crime, coming to understand the words of his beloved Uncle Ben: "With great power comes great
+        responsibility."
+    </string>
+
 
 </resources>

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.example.myapplication.R
-import com.example.myapplication.data.vos.Movie
+import com.example.myapplication.domain.Movie
 import com.example.myapplication.viewholders.MovieViewHolder
 
 class UpcomingListPagingAdapter(val onClick: (Movie)-> Unit): PagingDataAdapter<Movie, MovieViewHolder>(MovieDiff) {

@@ -40,6 +40,12 @@ sealed class Trending {
         is Movie -> posterPath
     }
 
+    fun getBannerImage() = when(this){
+        is Movie -> backdropPath
+        is TV -> backdropPath
+        is Person -> profilePath
+    }
+
     fun getDisplayName() = when(this){
         is Person -> name
         is TV -> name

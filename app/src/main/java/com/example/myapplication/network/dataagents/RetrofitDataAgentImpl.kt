@@ -1,28 +1,17 @@
 package com.example.myapplication.network.dataagents
 
-import android.content.Context
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.myapplication.ACCESS_TOKEN
-import com.example.myapplication.BASE_URL
-import com.example.myapplication.data.vos.*
-import com.example.myapplication.domain.Trending
-import com.example.myapplication.domain.TrendingMapper
+import com.example.myapplication.SESSION_ID
+import com.example.myapplication.domain.*
+import com.example.myapplication.network.FavoritesRequest
 import com.example.myapplication.network.MovieApi
-import com.example.myapplication.network.dto.MovieDto
 import com.example.myapplication.network.dto.asDomain
-import com.example.myapplication.network.responses.*
-import com.example.myapplication.pagingsources.GenresPagingSource
-import com.example.myapplication.pagingsources.MoviesPagingSource
-import com.example.myapplication.persistance.entities.MovieEntity
-import com.readystatesoftware.chuck.ChuckInterceptor
-import dagger.hilt.android.qualifiers.ApplicationContext
+import com.example.myapplication.paging.GenresPagingSource
+import com.example.myapplication.paging.MoviesPagingSource
 import kotlinx.coroutines.flow.Flow
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class RetrofitDataAgentImpl @Inject constructor(var movieApi: MovieApi) {
@@ -41,12 +30,12 @@ class RetrofitDataAgentImpl @Inject constructor(var movieApi: MovieApi) {
         }
     }
 
-    suspend fun getMovieGenre():MovieGenreVO{
+    suspend fun getMovieGenre(): MovieGenre {
         val response = movieApi.getMovieGenreResponse(ACCESS_TOKEN)
         return response.asDomain()
     }
 
-    suspend fun getMovieDetail(id: Long): MovieDetailVO {
+    suspend fun getMovieDetail(id: Long): MovieDetail {
         val response = movieApi.getMovieDetail(id, ACCESS_TOKEN)
         return response.asDomain()
     }
@@ -63,6 +52,24 @@ class RetrofitDataAgentImpl @Inject constructor(var movieApi: MovieApi) {
         return response.results.map {
             it.asDomain()
         }
+    }
+
+    suspend fun postFavorites(mediaType: String,mediaId: Long, favorite: Boolean):Boolean{
+        val response = movieApi.postFavorites(ACCESS_TOKEN, SESSION_ID, FavoritesRequest(mediaType,mediaId,favorite))
+        return response.success
+    }
+
+    suspend fun postFavoriteMovies(movieId: Long, favorite: Boolean):Boolean{
+        return postFavorites("movie",movieId,favorite)
+    }
+
+    suspend fun postFavoriteTv(tvId: Long, favorite: Boolean):Boolean{
+        return postFavorites("tv",tvId,favorite)
+    }
+
+    suspend fun getFavoritedMovies(movieId: Long): Boolean {
+        val response = movieApi.getFavoritedMovies(movieId, ACCESS_TOKEN,SESSION_ID)
+        return response.favorite
     }
 
     suspend fun getAllTrending(mediaType: String, timeWindow: String): List<Trending> {
@@ -83,7 +90,7 @@ class RetrofitDataAgentImpl @Inject constructor(var movieApi: MovieApi) {
     }
 
     fun getGenreMovies(genrId: Int): Flow<PagingData<Movie>>{
-        val flow =  Pager(
+        val flow = Pager(
             PagingConfig(pageSize = 20)
         ){
             GenresPagingSource(movieApi,genrId)

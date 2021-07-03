@@ -1,12 +1,7 @@
 package com.example.myapplication.network.responses
 
-import com.example.myapplication.data.vos.GenresVO
-import com.example.myapplication.data.vos.MovieGenreVO
+import com.example.myapplication.domain.Genres
 
 data class GetMovieGenreResponse(
-    val genres: List<GenresVO>
+    val genres: List<Genres>
 )
-
-fun GetMovieGenreResponse.asDomain(): MovieGenreVO{
-    return MovieGenreVO(genres)
-}

@@ -16,7 +16,7 @@ class MovieBannerAdpter: BaseBannerAdapter<Trending>() {
         pageSize: Int
     ) {
 
-        val url = "https://image.tmdb.org/t/p/w500/"+ data!!.getImage()
+        val url = "https://image.tmdb.org/t/p/w500/"+ data!!.getBannerImage()
         Glide.with(holder!!.itemView.context).load(url)
             .into(holder.findViewById(R.id.banner_image))
     }

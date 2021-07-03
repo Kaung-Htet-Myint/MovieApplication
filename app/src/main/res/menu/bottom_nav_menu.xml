@@ -15,4 +15,9 @@
         android:title="@string/menu_tv"
         android:icon="@drawable/ic_baseline_tv_white_24"/>
 
+    <item
+        android:id="@+id/favourite"
+        android:title="@string/menu_fav"
+        android:icon="@drawable/ic_baseline_favorite_24"/>
+
 </menu>

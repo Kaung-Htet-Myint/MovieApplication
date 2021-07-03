@@ -3,11 +3,9 @@ package com.example.myapplication.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.ListAdapter
 import com.example.myapplication.R
-import com.example.myapplication.data.vos.Movie
+import com.example.myapplication.domain.Movie
 import com.example.myapplication.viewholders.MovieViewHolder
-import com.example.myapplication.viewholders.SearchViewHolder
 
 class GenreAdapter(val onClick: (Movie)-> Unit) : PagingDataAdapter<Movie, MovieViewHolder>(MovieDiff) {
 

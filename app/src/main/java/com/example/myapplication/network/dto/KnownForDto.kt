@@ -1,6 +1,6 @@
-package com.example.myapplication.data.vos
+package com.example.myapplication.network.dto
 
-data class KnownForVO(
+data class KnownForDto(
     val vote_count: Double,
     val title: String,
     val media_type: String,

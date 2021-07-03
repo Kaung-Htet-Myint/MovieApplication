@@ -2,10 +2,10 @@ package com.example.myapplication.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.*
-import com.example.myapplication.data.vos.MovieGenreVO
-import com.example.myapplication.data.vos.Movie
-import com.example.myapplication.data.vos.asEntity
+import com.example.myapplication.domain.MovieGenre
+import com.example.myapplication.domain.Movie
 import com.example.myapplication.domain.Trending
+import com.example.myapplication.domain.asEntity
 import com.example.myapplication.network.dataagents.RetrofitDataAgentImpl
 import com.example.myapplication.persistance.AppDatabase
 import com.example.myapplication.persistance.entities.*
@@ -50,8 +50,8 @@ class MovieListViewModel @Inject constructor(
     val allTrendingLiveData: LiveData<ViewState<List<Trending>>>
         get() = _allTrendingLiveData
 
-    private val _movieGenresLiveData = MutableLiveData<MovieGenreVO>()
-    val movieGenresLiveData: LiveData<MovieGenreVO>
+    private val _movieGenresLiveData = MutableLiveData<MovieGenre>()
+    val movieGenresLiveData: LiveData<MovieGenre>
     get() = _movieGenresLiveData
 
     fun saveUpComingList() {
@@ -95,8 +95,8 @@ class MovieListViewModel @Inject constructor(
             try {
                 withContext(Dispatchers.IO) {
                     retrofitDataAgentImpl.getPopularMovies().also {
-                        appDatabase.movieDao().insertAllMovies(it.map { resultVO ->
-                            resultVO.asEntity("popular")
+                        appDatabase.movieDao().insertAllMovies(it.map {
+                            it.asEntity("popular")
                         })
                     }
                 }
@@ -163,6 +163,7 @@ fun MoviesWithGenre.asDomain(): Movie {
         title = movie.title,
         video = movie.video,
         voteAverage = movie.voteAverage,
+        isFavorite = false,
         voteCount = movie.voteCount
     )
 }
@@ -181,6 +182,7 @@ fun MovieEntity.asDomain(genreId: List<Int>): Movie {
         title = title,
         video = video,
         voteAverage = voteAverage,
+        isFavorite = isFavorite,
         voteCount = voteCount
     )
 }

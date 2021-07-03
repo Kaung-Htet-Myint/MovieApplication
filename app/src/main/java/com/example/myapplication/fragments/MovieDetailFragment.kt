@@ -14,7 +14,6 @@ import com.example.myapplication.databinding.FragmentMovieDetailBinding
 import com.example.myapplication.utils.ViewState
 import com.example.myapplication.viewmodels.MovieDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.Error
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -60,29 +59,50 @@ class MovieDetailFragment : Fragment() {
                     binding.pbLoading.isVisible = false
                     binding.gpMovieDetail.isVisible = true
 
-                    val url = "https://image.tmdb.org/t/p/original/" + it.data.backdrop_path
+                    val url = "https://image.tmdb.org/t/p/original/" + it.data.backdropPath
                     Glide.with(requireContext()).load(url)
                         .into(binding.ivMovieDetail)
-                    binding.tvDetailTitle.setText(it.data.original_title)
-                    binding.tvLenguage.setText(it.data.original_language)
+                    binding.tvDetailTitle.setText(it.data.originalTitle)
+                    binding.tvLenguage.setText(it.data.originalLanguage)
                     binding.tvOverview.setText(it.data.overview)
                     binding.tvRating.setText(it.data.popularity.toString())
                 }
 
                 is ViewState.Error -> {
                     binding.pbLoading.isVisible = false
-                    Toast.makeText(requireContext(),it.error.message, Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), it.error.message, Toast.LENGTH_LONG).show()
                 }
 
             }
         })
 
-        /*viewModel.detailLiveData.observe(viewLifecycleOwner) {
-            binding.tvDetailTitle.setText(it.original_title)
-            binding.tvLenguage.setText(it.original_language)
-            binding.tvOverview.setText(it.overview)
-            binding.tvRating.setText(it.popularity.toString())
-        }*/
+        viewModel.isSuccessfulFavorite.observe(viewLifecycleOwner){
+            when(it){
+                is ViewState.Successs -> {
+                    viewModel.isFavorite.observe(viewLifecycleOwner){isFavorite ->
+                        binding.cbFav.isChecked = isFavorite
+                    }
+                }
+                is ViewState.Error -> {
+                    binding.cbFav.isChecked = false
+                    Toast.makeText(requireContext(), it.error.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        viewModel.loadFavoritedMovies(args.id)
+        viewModel.isFavoritedMovieLiveData.observe(viewLifecycleOwner){
+            binding.cbFav.isChecked = it
+        }
+
+        binding.cbFav.setOnClickListener {
+            if (viewModel.isFavorite.value == true){
+                viewModel.removeFav(args.id)
+                //viewModel.favorite(args.id,false)
+            }else{
+                viewModel.addFav(args.id)
+            }
+        }
 
     }
 

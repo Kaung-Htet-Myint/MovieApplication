@@ -34,6 +34,7 @@
     <string name="menu_trending">Trending</string>
     <string name="menu_movie">Movie</string>
     <string name="menu_tv">TV</string>
+    <string name="menu_fav">Favorite</string>
     <string name="search_title">Movie</string>
     <string name="search_hint">Movie</string>
     <string name="overview_sample">

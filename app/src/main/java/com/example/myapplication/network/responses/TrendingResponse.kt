@@ -6,7 +6,6 @@ data class TrendingResponse(
     val page: Int?,
     val results: List<TrendingDto>?
 )
-
 data class TrendingDto(
     // person, tv and movie
     val id: Long?,

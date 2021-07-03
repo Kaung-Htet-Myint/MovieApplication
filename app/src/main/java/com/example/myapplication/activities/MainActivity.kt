@@ -49,6 +49,10 @@ class MainActivity : AppCompatActivity() {
                     navController.navigate(R.id.tvFragment)
                     true
                 }
+                R.id.favourite ->{
+                    navController.navigate(R.id.favouriteFragment)
+                    true
+                }
                 else -> false
             }
         }

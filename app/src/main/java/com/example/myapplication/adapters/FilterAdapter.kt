@@ -5,10 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.myapplication.R
-import com.example.myapplication.data.vos.GenresVO
+import com.example.myapplication.domain.Genres
 import com.example.myapplication.viewholders.FilterViewHolder
 
-class FilterAdapter (val onClick: (GenresVO)-> Unit) : ListAdapter<GenresVO, FilterViewHolder>(FilterDiff) {
+class FilterAdapter (val onClick: (Genres)-> Unit) : ListAdapter<Genres, FilterViewHolder>(FilterDiff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilterViewHolder {
         val itemView =
@@ -25,13 +25,13 @@ class FilterAdapter (val onClick: (GenresVO)-> Unit) : ListAdapter<GenresVO, Fil
 }
 
 
-object FilterDiff : DiffUtil.ItemCallback<GenresVO>() {
-    override fun areItemsTheSame(oldItem: GenresVO, newItem: GenresVO): Boolean {
+object FilterDiff : DiffUtil.ItemCallback<Genres>() {
+    override fun areItemsTheSame(oldItem: Genres, newItem: Genres): Boolean {
         // Id is unique.
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: GenresVO, newItem: GenresVO): Boolean {
+    override fun areContentsTheSame(oldItem: Genres, newItem: Genres): Boolean {
         return oldItem == newItem
     }
 }

@@ -2,10 +2,8 @@ package com.example.myapplication.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.*
-import com.example.myapplication.data.vos.Movie
-import com.example.myapplication.data.vos.MovieVO
+import com.example.myapplication.domain.Movie
 import com.example.myapplication.network.dataagents.RetrofitDataAgentImpl
-import com.example.myapplication.persistance.AppDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

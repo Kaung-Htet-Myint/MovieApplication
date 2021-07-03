@@ -1,4 +1,4 @@
-package com.example.myapplication.data.vos
+package com.example.myapplication.domain
 
 import com.example.myapplication.persistance.entities.MovieEntity
 
@@ -15,7 +15,8 @@ data class Movie(
     val title: String,
     val video: Boolean,
     val voteAverage: Float,
-    val voteCount: Long
+    val voteCount: Long,
+    val isFavorite: Boolean
 )
 
 fun Movie.asEntity(movieType: String): MovieEntity {
@@ -33,6 +34,7 @@ fun Movie.asEntity(movieType: String): MovieEntity {
         video = video,
         voteAverage = voteAverage,
         voteCount = voteCount,
+        isFavorite = isFavorite,
         movieType = movieType
     )
 }

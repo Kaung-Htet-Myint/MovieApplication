@@ -45,7 +45,7 @@ class MovieListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-            val upcomingListAdapter = MovieListAdapter(onClick = {
+        val upcomingListAdapter = MovieListAdapter(onClick = {
             //Toast.makeText(requireContext(),"Testing",Toast.LENGTH_LONG).show()
             findNavController().navigate(MovieListFragmentDirections.actionMovieListFragmentToDetailFragment(it.id))
         })
@@ -74,8 +74,6 @@ class MovieListFragment : Fragment() {
         val movieFilterAdapter = FilterAdapter(onClick = {
 
             findNavController().navigate(MovieListFragmentDirections.actionMovieListFragmentToGenreFragment(it.id,it.name))
-            val genreId = it.id
-
         })
 
         binding.rvMovieFilter.apply {

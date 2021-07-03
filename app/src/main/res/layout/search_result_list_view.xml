@@ -26,7 +26,7 @@
     <TextView
         android:id="@+id/tvOverview"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:ellipsize="end"
         android:maxLines="3"
         android:text="@string/overview_sample"

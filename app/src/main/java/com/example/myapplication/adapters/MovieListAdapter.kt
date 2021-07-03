@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.example.myapplication.R
-import com.example.myapplication.data.vos.Movie
+import com.example.myapplication.domain.Movie
 import com.example.myapplication.viewholders.MovieViewHolder
 
 class MovieListAdapter(val onClick: (Movie)-> Unit) : ListAdapter<Movie, MovieViewHolder>(MovieDiff) {

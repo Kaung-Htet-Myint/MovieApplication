@@ -51,11 +51,5 @@ class PopularSeeMoreFragment: Fragment() {
 
             this.adapter = popularListPagingAdapter
         }
-
-        /*viewLifecycleOwner.lifecycleScope.launch {
-            movieModel.getMoviesPagingMovies().collectLatest {
-                popularListPagingAdapter.submitData(it)
-            }
-        }*/
     }
 }

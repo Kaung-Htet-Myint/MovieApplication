@@ -24,7 +24,6 @@ data class MovieEntity(
     val isFavorite: Boolean
 )
 
-
 @Entity (tableName = "fav_movies")
 data class FavEntity(
     @PrimaryKey
@@ -83,7 +82,6 @@ data class MoviesWithGenre(
     )
     val genre : List<GenreEntity>
 )
-
 
 data class GenreWithMovies(
     @Embedded val genre: GenreEntity,

@@ -14,6 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TrendingViewModel @Inject constructor(val retrofitDataAgentImpl: RetrofitDataAgentImpl) :
     ViewModel() {
+
     private val _trendingMovieLiveData = MutableLiveData<ViewState<List<Trending>>>()
     val trendingMovieLiveData: LiveData<ViewState<List<Trending>>>
         get() = _trendingMovieLiveData

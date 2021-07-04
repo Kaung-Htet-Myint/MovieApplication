@@ -47,8 +47,22 @@ class MovieDetailFragment : Fragment() {
             findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
         }*/
 
-        viewModel.loadDetail(args.id)
-        viewModel.detailLiveData.observe(viewLifecycleOwner, {
+        viewModel.loadMovieDetail(args.id)
+        viewModel.getMovieId(args.id)
+        viewModel.movieDetailLiveData.observe(viewLifecycleOwner){
+            binding.pbLoading.isVisible = false
+            binding.gpMovieDetail.isVisible = true
+
+            val url = "https://image.tmdb.org/t/p/original/" + it.backdropPath
+            Glide.with(requireContext()).load(url)
+                .into(binding.ivMovieDetail)
+            binding.tvDetailTitle.text = it.originalTitle
+            binding.tvLenguage.text = it.originalLanguage
+            binding.tvOverview.text = it.overview
+            binding.tvRating.text = it.popularity.toString()
+        }
+
+        /*viewModel.detailLiveData.observe(viewLifecycleOwner, {
             when (it) {
                 is ViewState.Loading -> {
                     binding.pbLoading.isVisible = true
@@ -74,7 +88,7 @@ class MovieDetailFragment : Fragment() {
                 }
 
             }
-        })
+        })*/
 
         viewModel.isSuccessfulFavorite.observe(viewLifecycleOwner){
             when(it){
@@ -103,7 +117,6 @@ class MovieDetailFragment : Fragment() {
                 viewModel.addFav(args.id)
             }
         }
-
     }
 
     override fun onDestroyView() {

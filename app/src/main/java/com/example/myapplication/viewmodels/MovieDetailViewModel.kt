@@ -1,83 +1,103 @@
 package com.example.myapplication.viewmodels
 
 import android.util.Log
-import android.widget.Toast
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.myapplication.domain.MovieDetail
-import com.example.myapplication.domain.asEntity
 import com.example.myapplication.network.dataagents.RetrofitDataAgentImpl
 import com.example.myapplication.persistance.AppDatabase
 import com.example.myapplication.utils.ViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MovieDetailViewModel @Inject constructor(val retrofitDataAgentImpl: RetrofitDataAgentImpl,
-                                               val appDatabase: AppDatabase) :
+class MovieDetailViewModel @Inject constructor(
+    val retrofitDataAgentImpl: RetrofitDataAgentImpl,
+    val appDatabase: AppDatabase
+) :
     ViewModel() {
-    private val _detailLiveData =  MutableLiveData<ViewState<MovieDetail>>()
+    private val _detailLiveData = MutableLiveData<ViewState<MovieDetail>>()
     val detailLiveData: LiveData<ViewState<MovieDetail>>
-
-    get() = _detailLiveData
+        get() = _detailLiveData
 
     var isSuccessfulFavorite = MutableLiveData<ViewState<Boolean>>()
 
     var isFavorite = MutableLiveData<Boolean>()
 
     var _isFavoritMovieLiveData = MutableLiveData<Boolean>()
-    val isFavoritedMovieLiveData : LiveData<Boolean>
-    get() = _isFavoritMovieLiveData
+    val isFavoritedMovieLiveData: LiveData<Boolean>
+        get() = _isFavoritMovieLiveData
 
-    fun loadDetail(id: Long) {
+    /* var _movieDetailsLiveData = MutableLiveData<MovieDetail>()
+     val movieDetailLiveData : LiveData<MovieDetail>
+     get() = _movieDetailsLiveData*/
+
+    var movieId: MutableLiveData<Long> = MutableLiveData()
+    val movieDetailLiveData = movieId.asFlow()
+        .filterNotNull()
+        .distinctUntilChanged()
+        .flatMapConcat { appDatabase.movieDao().getMovieDetails(it) }
+        .filterNotNull()
+        .map {
+            it.asDomain() }
+        .asLiveData()
+
+    fun loadMovieDetail(id: Long) {
         viewModelScope.launch {
             try {
-                _detailLiveData.value = ViewState.Loading
-                _detailLiveData.value = ViewState.Successs(retrofitDataAgentImpl.getMovieDetail(id))
-            }catch (e: Exception){
-                _detailLiveData.value = ViewState.Error(e)
+                retrofitDataAgentImpl.getMovieDetail(id)
+            } catch (e: Exception) {
+                ViewState.Error(e)
             }
         }
     }
 
-    fun loadFavoritedMovies(id: Long){
+    fun getMovieId(id: Long) {
+        movieId.value = id
+    }
+
+    fun loadFavoritedMovies(id: Long) {
         viewModelScope.launch {
             try {
                 _isFavoritMovieLiveData.value = retrofitDataAgentImpl.getFavoritedMovies(id)
-            }catch (e: Exception){
-                Log.e("load favorite","fail",e)
+            } catch (e: Exception) {
+                Log.e("load favorite", "fail", e)
             }
         }
     }
 
-    fun addFav(mediaId: Long){
+    fun addFav(mediaId: Long) {
         viewModelScope.launch {
             try {
                 isSuccessfulFavorite.value = ViewState.Loading
-                isSuccessfulFavorite.value = ViewState.Successs(retrofitDataAgentImpl.postFavoriteMovies(mediaId, true).also {
-                    appDatabase.movieDao().updateMovies(mediaId, it)
-                })
+                isSuccessfulFavorite.value = ViewState.Successs(
+                    retrofitDataAgentImpl.postFavoriteMovies(mediaId, true).also {
+                        appDatabase.movieDao().updateMovies(mediaId, it)
+                    })
                 isFavorite.value = true
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 isSuccessfulFavorite.value = ViewState.Error(e)
             }
         }
     }
 
-    fun removeFav(mediaId: Long){
+    fun removeFav(mediaId: Long) {
         viewModelScope.launch {
             try {
                 isSuccessfulFavorite.value = ViewState.Loading
-                isSuccessfulFavorite.value = ViewState.Successs(retrofitDataAgentImpl.postFavoriteMovies(mediaId, false).also {
-                    appDatabase.movieDao().updateMovies(mediaId, it)
-                })
+                isSuccessfulFavorite.value = ViewState.Successs(
+                    retrofitDataAgentImpl.postFavoriteMovies(mediaId, false).also {
+                        appDatabase.movieDao().updateMovies(mediaId, it)
+                    })
                 isFavorite.value = false
-            }catch (e: Exception){
-                Log.e("Save to fav","fail",e)
+            } catch (e: Exception) {
+                Log.e("Save to fav", "fail", e)
             }
         }
     }
 }
+

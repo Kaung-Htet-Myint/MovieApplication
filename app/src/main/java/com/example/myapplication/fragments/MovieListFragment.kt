@@ -39,7 +39,6 @@ class MovieListFragment : Fragment() {
 
         _binding = FragmentMoviesListBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,7 +71,6 @@ class MovieListFragment : Fragment() {
         }
 
         val movieFilterAdapter = FilterAdapter(onClick = {
-
             findNavController().navigate(MovieListFragmentDirections.actionMovieListFragmentToGenreFragment(it.id,it.name))
         })
 
@@ -88,6 +86,7 @@ class MovieListFragment : Fragment() {
 
         movieViewModel.loadAllTrending(mediaType = "all", timeWindow = "day")
         movieViewModel.allTrendingLiveData.observe(viewLifecycleOwner){
+
             when(it){
                 is ViewState.Loading -> {
                     binding.pbMovieList.isVisible = true
@@ -104,7 +103,6 @@ class MovieListFragment : Fragment() {
                     Toast.makeText(requireContext(),it.error.message,Toast.LENGTH_LONG).show()
                 }
             }
-
         }
 
         movieViewModel.upComingMoviesLiveData.observe(viewLifecycleOwner){

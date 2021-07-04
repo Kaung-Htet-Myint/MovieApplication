@@ -16,7 +16,6 @@ data class MovieDetail(
     val voteAverage: Float,
     val voteCount: Long
 )
-
 fun MovieDetail.asEntity(): FavEntity {
     return FavEntity(
         movieId = id,

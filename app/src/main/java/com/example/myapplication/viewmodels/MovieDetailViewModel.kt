@@ -46,10 +46,14 @@ class MovieDetailViewModel @Inject constructor(
             it.asDomain() }
         .asLiveData()
 
+    var id: Long = 0
+
     fun loadMovieDetail(id: Long) {
+        if (this.id == id) return
         viewModelScope.launch {
             try {
                 retrofitDataAgentImpl.getMovieDetail(id)
+                this@MovieDetailViewModel.id = id
             } catch (e: Exception) {
                 ViewState.Error(e)
             }

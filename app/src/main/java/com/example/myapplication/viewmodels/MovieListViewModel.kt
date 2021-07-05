@@ -22,12 +22,6 @@ class MovieListViewModel @Inject constructor(
     val appDatabase: AppDatabase
 ) : ViewModel() {
 
-    init {
-        saveUpComingList()
-        savePopularList()
-        saveTopRatedList()
-    }
-
     val upComingMoviesLiveData = appDatabase.movieDao().getMovies("upComing").map {
         it.map {
             it.asDomain()
@@ -54,19 +48,26 @@ class MovieListViewModel @Inject constructor(
     val movieGenresLiveData: LiveData<MovieGenre>
     get() = _movieGenresLiveData
 
+    init {
+        saveUpComingList()
+        savePopularList()
+        saveTopRatedList()
+        loadAllTrending( "all",  "day")
+    }
+
     fun saveUpComingList() {
         viewModelScope.launch {
             try {
                 withContext(Dispatchers.IO) {
                     retrofitDataAgentImpl.getUpComingMovies().also {
                         // save movie entities
-                        appDatabase.movieDao().insertAllMovies(it.map { resultVO ->
-                            resultVO.asEntity("upComing")
+                        appDatabase.movieDao().insertAllMovies(it.map { movie ->
+                            movie.asEntity("upComing")
                         })
 
                         // save movie genres
-                        val movieGeneres: List<GenreEntity> = it.flatMap { resultsVO ->
-                            resultsVO.genreIds.map {
+                        val movieGeneres: List<GenreEntity> = it.flatMap { movie ->
+                            movie.genreIds.map {
                                 GenreEntity(it)
                             }
                         }
@@ -85,7 +86,7 @@ class MovieListViewModel @Inject constructor(
                     }
                 }
             } catch (e: Exception) {
-                    Log.e("abc",e.message.orEmpty())
+                    Log.e("UpComing Movies",e.message.orEmpty())
             }
         }
     }
@@ -98,10 +99,29 @@ class MovieListViewModel @Inject constructor(
                         appDatabase.movieDao().insertAllMovies(it.map {
                             it.asEntity("popular")
                         })
+
+                        // save movie genres
+                        val movieGeneres: List<GenreEntity> = it.flatMap { movie ->
+                            movie.genreIds.map {
+                                GenreEntity(it)
+                            }
+                        }
+                        appDatabase.genreDao().insert(movieGeneres)
+
+                        // save movie and genres join table
+                        val movieAndGenres: List<MovieGenreEntity> = it.flatMap { movie ->
+                            movie.genreIds.map { genreId ->
+                                MovieGenreEntity(
+                                    id = "upComing"+movie.id.toString(),
+                                    genreId = genreId
+                                )
+                            }
+                        }
+                        appDatabase.movieWithGenre().insert(movieAndGenres)
                     }
                 }
             } catch (e: Exception) {
-
+                Log.e("Popular Movies",e.message.orEmpty())
             }
         }
     }
@@ -112,17 +132,36 @@ class MovieListViewModel @Inject constructor(
                 withContext(Dispatchers.IO) {
                     retrofitDataAgentImpl.getTopRatedMovies().also {
                         appDatabase.movieDao()
-                            .insertAllMovies(retrofitDataAgentImpl.getTopRatedMovies().map { resultVO ->
-                                resultVO.asEntity("topRated")
+                            .insertAllMovies(it.map { movie ->
+                                movie.asEntity("topRated")
                             })
+                        // save movie genres
+                        val movieGeneres: List<GenreEntity> = it.flatMap { movie ->
+                            movie.genreIds.map {
+                                GenreEntity(it)
+                            }
+                        }
+                        appDatabase.genreDao().insert(movieGeneres)
+
+                        // save movie and genres join table
+                        val movieAndGenres: List<MovieGenreEntity> = it.flatMap { movie ->
+                            movie.genreIds.map { genreId ->
+                                MovieGenreEntity(
+                                    id = "upComing"+movie.id.toString(),
+                                    genreId = genreId
+                                )
+                            }
+                        }
+                        appDatabase.movieWithGenre().insert(movieAndGenres)
                     }
                 }
             } catch (e: Exception) {
-
+                Log.e("TopRated Movies",e.message.orEmpty())
             }
         }
     }
 
+    //for banner view
     fun loadAllTrending(mediaType: String, timeWindow: String) {
 
         viewModelScope.launch {

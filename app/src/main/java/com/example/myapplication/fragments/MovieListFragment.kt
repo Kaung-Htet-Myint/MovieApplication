@@ -84,7 +84,8 @@ class MovieListFragment : Fragment() {
             movieFilterAdapter.submitList(it.genres)
         }
 
-        movieViewModel.loadAllTrending(mediaType = "all", timeWindow = "day")
+        //showing trending data for banner
+        //movieViewModel.loadAllTrending(mediaType = "all", timeWindow = "day")
         movieViewModel.allTrendingLiveData.observe(viewLifecycleOwner){
 
             when(it){

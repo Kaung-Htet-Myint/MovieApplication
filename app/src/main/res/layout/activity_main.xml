@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -21,16 +22,29 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary">
 
-
-            <ImageView
-                android:id="@+id/ivSearch"
-                android:layout_width="60dp"
+            <RelativeLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:src="@drawable/chuck_ic_search_white_24dp" />
+                android:layout_gravity="end">
+
+                <ImageView
+                    android:id="@+id/ivSearch"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/chuck_ic_search_white_24dp"
+                    android:layout_alignTop="@+id/sw_for_theme"
+                    android:layout_marginTop="2dp"/>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/sw_for_theme"
+                    android:layout_width="wrap_content"
+                    android:layout_toEndOf="@+id/ivSearch"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/Theme.MyTheme"/>
+
+            </RelativeLayout>
 
         </androidx.appcompat.widget.Toolbar>
-
 
     </com.google.android.material.appbar.AppBarLayout>
 

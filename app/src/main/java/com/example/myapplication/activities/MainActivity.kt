@@ -8,10 +8,12 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.navigation.Navigation
 import com.example.myapplication.R
 import com.example.myapplication.databinding.ActivityMainBinding
+import com.example.myapplication.utils.DarkModeHelper
 import com.example.myapplication.viewmodels.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -57,6 +59,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        binding.swForTheme.isChecked = DarkModeHelper.getInstance(this).isDark()
+
+        binding.swForTheme.setOnClickListener {
+            DarkModeHelper.getInstance(this).toggleDark()
+        }
     }
 
     override fun onStart() {

@@ -1,13 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:layout_width="match_parent"
+<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".fragments.MoviesListFragment">
+        tools:context=".fragments.MovieListFragment">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ProgressBar
+                android:id="@+id/pbMovieList"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center" />
+        </FrameLayout>
+
+        <com.zhpan.bannerview.BannerViewPager
+            android:id="@+id/banner_view"
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </com.zhpan.bannerview.BannerViewPager>
 
         <TextView
             android:id="@+id/tvPopularList"
@@ -32,12 +55,12 @@
             android:id="@+id/tvUpcomingList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:text="@string/upcoming_movies_list"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/rvMovieFilter" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvUpcomingList"
@@ -62,9 +85,61 @@
             android:id="@+id/rvTopRated"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="64dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/rvPopularList"
             app:layout_constraintTop_toBottomOf="@+id/tvTopRated" />
+
+        <ImageView
+            android:id="@+id/ivSeeMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/tvUpcomingList"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.8"
+            app:layout_constraintStart_toEndOf="@+id/tvUpcomingList"
+            app:srcCompat="@drawable/ic_baseline_arrow_forward_24" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="20dp" />
+
+        <ImageView
+            android:id="@+id/ivPopularSeeMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/tvPopularList"
+            app:layout_constraintEnd_toEndOf="@+id/ivSeeMore"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/tvPopularList"
+            app:srcCompat="@drawable/ic_baseline_arrow_forward_24" />
+
+        <ImageView
+            android:id="@+id/ivTopRatedSeeMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/tvTopRated"
+            app:layout_constraintEnd_toEndOf="@+id/ivPopularSeeMore"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/tvTopRated"
+            app:srcCompat="@drawable/ic_baseline_arrow_forward_24" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/gpMovieList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="banner_view,rvUpcomingList,rvPopularList,rvTopRated" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMovieFilter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/banner_view" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

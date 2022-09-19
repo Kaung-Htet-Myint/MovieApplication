@@ -1,148 +1,101 @@
 package com.example.myapplication.network.dataagents
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.example.myapplication.ACCESS_TOKEN
-import com.example.myapplication.BASE_URL
-import com.example.myapplication.data.vos.MovieDetailVO
-import com.example.myapplication.data.vos.MovieVO
+import com.example.myapplication.SESSION_ID
+import com.example.myapplication.domain.*
+import com.example.myapplication.network.FavoritesRequest
 import com.example.myapplication.network.MovieApi
-import com.example.myapplication.network.responses.*
-import okhttp3.OkHttpClient
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
+import com.example.myapplication.network.dto.asDomain
+import com.example.myapplication.paging.GenresPagingSource
+import com.example.myapplication.paging.MoviesPagingSource
+import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-object RetrofitDataAgentImpl : MovieDataAgent {
-    private var movieApi: MovieApi
+class RetrofitDataAgentImpl @Inject constructor(var movieApi: MovieApi) {
 
-    init {
-        val okHttpClient = OkHttpClient.Builder()
-            .connectTimeout(15, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .build()
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(okHttpClient)
-            .build()
-
-        movieApi = retrofit.create(MovieApi::class.java)
-    }
-    override fun getUpComingMovies(
-        onSuccess: (MovieVO) -> Unit,
-        onFailure: (String) -> Unit
-    ) {
-        val upComingMoviesCall = movieApi.getUpcomingMovieResponse(ACCESS_TOKEN)
-
-        upComingMoviesCall.enqueue(object : Callback<GetMovieResponse> {
-            override fun onFailure(call: Call<GetMovieResponse>, t: Throwable) {
-                onFailure(t.localizedMessage)
-            }
-
-            override fun onResponse(
-                call: Call<GetMovieResponse>,
-                response: Response<GetMovieResponse>
-            ) {
-                val upcomingMovieResponse = response.body()
-
-                if (upcomingMovieResponse != null) {
-                    if (upcomingMovieResponse.results != null) {
-                        onSuccess(upcomingMovieResponse.asDomain())
-                    } else {
-                        onFailure("Movie Response Fail!")
-                    }
-                } else {
-                    onFailure("Network Fail")
-                }
-            }
-
-        })
+    suspend fun getUpComingMovies(): List<Movie> {
+        val response = movieApi.getUpcomingMovieResponse(ACCESS_TOKEN)
+        return response.results.map {
+            it.asDomain()
+        }
     }
 
-    override fun getMovieDetail(id: Long,onSuccess: (MovieDetailVO) -> Unit, onFailure: (String) -> Unit) {
-        val movieDetailCall = movieApi.getDetailResponse(id,ACCESS_TOKEN)
-        movieDetailCall.enqueue(object : Callback<GetDetailResponse>{
-            override fun onFailure(call: Call<GetDetailResponse>, t: Throwable) {
-                onFailure(t.localizedMessage)
-            }
-
-            override fun onResponse(
-                call: Call<GetDetailResponse>,
-                response: Response<GetDetailResponse>
-            ) {
-                val movieDetailResponse = response.body()
-
-                if (movieDetailResponse != null){
-                    if (movieDetailResponse.backdrop_path != null){
-                        onSuccess(movieDetailResponse.asDomain())
-                    }else{
-                        onFailure("Detail Response Fail!")
-                    }
-                }else{
-                    onFailure("Network Fail!")
-                }
-            }
-        })
+    suspend fun getSearchMovies(query: String): List<Movie> {
+        val response = movieApi.getSearchResponse(ACCESS_TOKEN,query)
+        return response.results.map {
+            it.asDomain()
+        }
     }
 
-    override fun getPopularMoives(
-        onSuccess: (MovieVO) -> Unit,
-        onFailure: (String) -> Unit
-    ) {
-        val popularMoviesCall = movieApi.getPopularResponse(ACCESS_TOKEN)
-        popularMoviesCall.enqueue(object : Callback<GetMovieResponse>{
-            override fun onFailure(call: Call<GetMovieResponse>, t: Throwable) {
-                onFailure(t.localizedMessage)
-            }
-
-            override fun onResponse(
-                call: Call<GetMovieResponse>,
-                response: Response<GetMovieResponse>
-            ) {
-                val popularResponse = response.body()
-
-                if (popularResponse != null){
-                    if (popularResponse.results != null){
-                        onSuccess(popularResponse.asDomain())
-                    }else{
-                        onFailure("Popular Movies Response Fail!")
-                    }
-                }else{
-                    onFailure("Network Fail!!")
-                }
-            }
-        })
+    suspend fun getMovieGenre(): MovieGenre {
+        val response = movieApi.getMovieGenreResponse(ACCESS_TOKEN)
+        return response.asDomain()
     }
 
-    override fun getTopRatedMovies(onSuccess: (MovieVO) -> Unit, onFailure: (String) -> Unit) {
-        val topRatedCall = movieApi.getTopRatedResponse(ACCESS_TOKEN)
-        topRatedCall.enqueue(object : Callback<GetMovieResponse>{
-            override fun onFailure(call: Call<GetMovieResponse>, t: Throwable) {
-                onFailure(t.localizedMessage)
-            }
-
-            override fun onResponse(
-                call: Call<GetMovieResponse>,
-                response: Response<GetMovieResponse>
-            ) {
-                val topRatedResponse = response.body()
-
-                if (topRatedResponse != null){
-                    if (topRatedResponse.results != null){
-                        onSuccess(topRatedResponse.asDomain())
-                    }else{
-                        onFailure("Top Rated Movies Response Fail!")
-                    }
-                }else{
-                    onFailure("Network Fail!!")
-                }
-            }
-        })
+    suspend fun getMovieDetail(id: Long): MovieDetail {
+        val response = movieApi.getMovieDetail(id, ACCESS_TOKEN)
+        return response.asDomain()
     }
 
+    suspend fun getPopularMovies(): List<Movie> {
+        val response = movieApi.getPopularResponse(ACCESS_TOKEN)
+        return response.results.map {
+            it.asDomain()
+        }
+    }
 
+    suspend fun getTopRatedMovies(): List<Movie> {
+        val response = movieApi.getTopRatedResponse(ACCESS_TOKEN)
+        return response.results.map {
+            it.asDomain()
+        }
+    }
+
+    suspend fun postFavorites(mediaType: String,mediaId: Long, favorite: Boolean):Boolean{
+        val response = movieApi.postFavorites(ACCESS_TOKEN, SESSION_ID, FavoritesRequest(mediaType,mediaId,favorite))
+        return response.success
+    }
+
+    suspend fun postFavoriteMovies(movieId: Long, favorite: Boolean):Boolean{
+        return postFavorites("movie",movieId,favorite)
+    }
+
+    suspend fun postFavoriteTv(tvId: Long, favorite: Boolean):Boolean{
+        return postFavorites("tv",tvId,favorite)
+    }
+
+    suspend fun getFavoritedMovies(movieId: Long): Boolean {
+        val response = movieApi.getFavoritedMovies(movieId, ACCESS_TOKEN,SESSION_ID)
+        return response.favorite
+    }
+
+    suspend fun getAllTrending(mediaType: String, timeWindow: String): List<Trending> {
+        val response = movieApi.getTrendingResponse(mediaType,timeWindow,ACCESS_TOKEN)
+        val trendingMapper = TrendingMapper()
+
+        return trendingMapper.map(response.results)
+    }
+
+    fun getPagingMovies(movieType: String): Flow<PagingData<Movie>> {
+        val flow =  Pager(
+            PagingConfig(pageSize = 20)
+        ){
+            MoviesPagingSource(movieApi, movieType)
+        }.flow
+
+        return flow
+    }
+
+    fun getGenreMovies(genrId: Int): Flow<PagingData<Movie>>{
+        val flow = Pager(
+            PagingConfig(pageSize = 20)
+        ){
+            GenresPagingSource(movieApi,genrId)
+        }.flow
+
+        return flow
+    }
 }

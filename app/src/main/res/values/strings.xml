@@ -1,9 +1,12 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Movie Application</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
+    <string name="third_fragment_label">Third Fragment</string>
+    <string name="popular_seemore_fragment_label">Popular See More Fragment</string>
+    <string name="top_rated_seemore_fragment_label">Top Rated See More <Fragm></Fragm>ent</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
@@ -11,7 +14,9 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
     <string name="upcoming_movies_list">Upcoming Movies List</string>
+    <string name="popular_movies_list">Popular Movies List</string>
     <string name="movie_name">Movie Name</string>
+    <string name="genre_type">Genre type</string>
     <string name="year">2021</string>
     <string name="overview">
         "Spider-Man" centers on student Peter Parker (Tobey Maguire) who, after being bitten by
@@ -24,4 +29,20 @@
 
     <string name="pop_movie_list">Popular Movies List</string>
     <string name="top_rated_list">Top Rated Movies List</string>
+    
+    
+    <string name="menu_trending">Trending</string>
+    <string name="menu_movie">Movie</string>
+    <string name="menu_tv">TV</string>
+    <string name="menu_fav">Favorite</string>
+    <string name="search_title">Movie</string>
+    <string name="search_hint">Movie</string>
+    <string name="overview_sample">
+        "Spider-Man" centers on student Peter Parker (Tobey Maguire) who, after being bitten by a genetically-altered
+        spider, gains superhuman strength and the spider-like ability to cling to any surface. He vows to use his abilities
+        to fight crime, coming to understand the words of his beloved Uncle Ben: "With great power comes great
+        responsibility."
+    </string>
+
+
 </resources>

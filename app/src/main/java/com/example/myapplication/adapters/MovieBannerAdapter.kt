@@ -7,7 +7,7 @@ import com.example.myapplication.domain.Trending
 import com.zhpan.bannerview.BaseBannerAdapter
 import com.zhpan.bannerview.BaseViewHolder
 
-class MovieBannerAdpter: BaseBannerAdapter<Trending>() {
+class MovieBannerAdapter: BaseBannerAdapter<Trending>() {
 
     override fun bindData(
         holder: BaseViewHolder<Trending>?,

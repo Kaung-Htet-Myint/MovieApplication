@@ -86,10 +86,6 @@
         android:id="@+id/tvFragment"
         android:name="com.example.myapplication.fragments.TvFragment"
         android:label="TvFragment" />
-    <activity
-        android:id="@+id/mainActivity"
-        android:name="com.example.myapplication.activities.MainActivity"
-        android:label="MainActivity" />
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.myapplication.fragments.SearchFragment"

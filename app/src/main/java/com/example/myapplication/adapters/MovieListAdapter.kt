@@ -17,6 +17,6 @@ class MovieListAdapter(val onClick: (Movie)-> Unit) : ListAdapter<Movie, MovieVi
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
          val data = getItem(position)
-        holder.bind(data)
+         holder.bind(data)
     }
 }

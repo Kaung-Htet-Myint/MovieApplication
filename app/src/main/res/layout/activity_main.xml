@@ -31,7 +31,7 @@
                     android:id="@+id/ivSearch"
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/chuck_ic_search_white_24dp"
+                    android:src="@drawable/ic_baseline_search_24"
                     android:layout_alignTop="@+id/sw_for_theme"
                     android:layout_marginTop="2dp"/>
 
@@ -47,7 +47,6 @@
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
-
 
     <fragment
         android:id="@+id/nav_host_fragment_content_main"

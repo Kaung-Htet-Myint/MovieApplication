@@ -11,7 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.adapters.FilterAdapter
-import com.example.myapplication.adapters.MovieBannerAdpter
+import com.example.myapplication.adapters.MovieBannerAdapter
 import com.example.myapplication.adapters.MovieListAdapter
 import com.example.myapplication.databinding.FragmentMoviesListBinding
 import com.example.myapplication.domain.Trending
@@ -139,7 +139,7 @@ class MovieListFragment : Fragment() {
 
     private fun setupViewPager(result: List<Trending>){
         binding.bannerView.let {
-            it.setAdapter(MovieBannerAdpter())
+            it.setAdapter(MovieBannerAdapter())
             it.setLifecycleRegistry(lifecycle)
         }.create(result)
     }
